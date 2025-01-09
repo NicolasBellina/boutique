@@ -1,0 +1,15 @@
+{
+  "name": "dab-simulator",
+  "version": "1.0.0",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "cookie-parser": "^1.x.x",
+    "ejs": "^3.x.x",
+    "express": "^4.x.x",
+    "socket.io": "^4.8.1"
+  }
+}
