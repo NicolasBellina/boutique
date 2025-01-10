@@ -2,7 +2,6 @@ import express from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import cookieParser from 'cookie-parser';
-
 // Obtenir le nom de fichier actuel
 const __filename = fileURLToPath(import.meta.url);
 // Obtenir le répertoire actuel
@@ -26,4 +25,5 @@ app.use((req, res, next) => {
     res.locals.isAdmin = req.cookies.isAdmin === 'true';
     next();
 });
+
 

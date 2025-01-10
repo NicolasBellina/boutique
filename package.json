@@ -8,8 +8,11 @@
   },
   "dependencies": {
     "cookie-parser": "^1.x.x",
+    "dotenv": "^16.4.7",
     "ejs": "^3.x.x",
     "express": "^4.x.x",
-    "socket.io": "^4.8.1"
+    "sequelize": "^6.37.5",
+    "socket.io": "^4.8.1",
+    "tedious": "^18.6.1"
   }
 }
