@@ -15,7 +15,3 @@ Une API Rest (REST = REpresentational State Transfer), c'est une  API qui est co
     - auto-découvrabilité : En ayant obtenu une réponse abstraite, la réponse permet de savoir quelle requête effectuer pour explciter cette données.
 
     [Lien doc](https://www.nicolashachet.com/blog/developpement-php/larchitecture-rest-expliquee-en-5-regles/)
-
-## Structure d'URI à respecter
-
-![URI](URI.png "URI")
