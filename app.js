@@ -45,17 +45,19 @@ const server = http.createServer((request, response) => {
     // Rendu des pages
     try {
         const routes = {
+            
             '/': { template: 'src/pages/home.ejs', title: 'Accueil' },
             '/about': { template: 'src/pages/about.ejs', title: 'À propos' },
+            '/socket': { template: 'src/pages/socket.ejs', title: 'Chat' },
+            '/products': { template: 'src/pages/products.ejs', title: 'Produits' },
             '/contact': { template: 'src/pages/contact.ejs', title: 'Contact' },
-            '/socket': { template: 'src/pages/socket.ejs', title: 'Chat' }
         };
 
         const route = routes[pathname] || { template: 'src/pages/404.ejs', title: '404' };
         
         // Utilisation de path.join pour créer le chemin correct
         const templatePath = path.join(__dirname, route.template);
-        console.log('Chemin du template:', templatePath); // Ajout de journalisation
+        console.log('Chemin du template:', templatePath); 
         const content = fs.readFileSync(templatePath, 'utf8');
         
         const rendered = ejs.render(content, {
@@ -69,7 +71,7 @@ const server = http.createServer((request, response) => {
         response.writeHead(200, { 'Content-Type': 'text/html' });
         response.end(rendered);
     } catch (error) {
-        console.error('Erreur lors du rendu de la page:', error); // Ajout de journalisation
+        console.error('Erreur lors du rendu de la page:', error); 
         response.writeHead(500, { 'Content-Type': 'text/html' });
         response.end('<h1>500 - Erreur interne du serveur</h1>');
     }

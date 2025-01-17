@@ -18,6 +18,8 @@ const config = new sql.Sequelize(
             },
         },
         port: process.env.DB_PORT,
+        logging: console.log
+
     },
 
 );
