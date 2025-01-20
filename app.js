@@ -8,17 +8,34 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import determineCoupureGeneric from '../API/src/DAB/dab.js';
 import sequelize from './database.js';
+import ProductController from './src/controllers/productController.js';
+import express from 'express';
+import productRoutes from './src/routes/productRoutes.js';
 
 // Configuration des chemins pour ES modules
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+// Créer l'application Express
+const app = express();
+
+// Middleware pour parser le JSON
+app.use(express.json());
+
+// Routes API
+app.use('/api', productRoutes);
+
 // Création du serveur HTTP
-const server = http.createServer((request, response) => {
+const server = http.createServer(async (request, response) => {
     console.log('URL demandée : %s %s', request.method, request.url);
     const pathname = url.parse(request.url, true).pathname;
     const cookies = request.headers.cookie ? parse(request.headers.cookie) : {};
     const isAdmin = cookies.isAdmin === 'true';
+
+    // Si c'est une route API, laisser Express la gérer
+    if (pathname.startsWith('/api/')) {
+        return app(request, response);
+    }
 
     // Gestion des simulations DAB (dab.js)
     if (pathname === '/simulate-withdrawal' && request.method === 'POST') {

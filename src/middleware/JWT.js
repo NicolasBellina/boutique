@@ -1,12 +1,9 @@
 import jwt from 'jsonwebtoken';
 import { Request, Response, NextFunction } from 'express';
 
-interface DecodedToken {
-    userId: string;
-    [key: string]: any;
-}
 
-module.exports = (req: Request, res: Response, next: NextFunction): void => {
+
+module.exports = (req, res, next) => {
     try {
         var token = req.headers.authorization;
         const tokenParts = token?.split(' ');
@@ -18,14 +15,14 @@ module.exports = (req: Request, res: Response, next: NextFunction): void => {
             return;
         }
         try {
-            const decodedToken = jwt.verify(token, '1234567890') as DecodedToken;
-            let userId: string;
+            const decodedToken = jwt.verify(token, '1234567890');
+            let userId = '';
             if (typeof decodedToken !== 'string' && 'userId' in decodedToken) {
                 userId = decodedToken.userId;
             } else {
                 throw new Error('Invalid token payload');
             }
-            (req as any).userId = userId;
+            req.userId = userId;
             next();
         } catch (error) {
             res.status(401).json({ error: 'Token invalide' });
