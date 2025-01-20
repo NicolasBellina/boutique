@@ -55,7 +55,7 @@ const Product = sequelize.define('Produits', {
   }
 }, {
   tableName: 'Produits',
-  schema: 'dbo',
+  schema: 'Produits',
   timestamps: false,
   freezeTableName: true
 });

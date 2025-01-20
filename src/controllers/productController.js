@@ -12,6 +12,10 @@ const ProductController = {
             res.status(500).json({ message: 'Erreur lors de la récupération des produits' });
         }
     }
+    
 };
+
+
+
 
 export default ProductController;

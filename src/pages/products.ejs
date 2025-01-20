@@ -70,16 +70,17 @@
                     return;
                 }
                 
-                container.innerHTML = '<h2 class="mb-4">Nos Produits</h2>'; // Titre de la section
                 
-                // Création d'une grille de produits
                 const row = document.createElement('div');
                 row.className = 'row g-4';
+                
+                // Vérifier si le body a la classe bg-dark pour déterminer le thème
+                const isDarkMode = document.body.classList.contains('bg-dark');
                 
                 products.forEach(product => {
                     const productCard = `
                         <div class="col-md-4 mb-4">
-                            <div class="card h-100 ${locals.isAdmin ? 'bg-dark text-white' : ''} border-primary">
+                            <div class="card h-100 ${isDarkMode ? 'bg-dark text-white' : ''} border-primary">
                                 <div class="card-body">
                                     <h5 class="card-title">${product.nom}</h5>
                                     <p class="card-text">${product.description || 'Aucune description'}</p>

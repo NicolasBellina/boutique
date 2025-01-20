@@ -38,7 +38,7 @@ config.authenticate()
         console.log('✅ Connexion à la base de données réussie.');
         
         // Vérifier le contenu de la table Produits
-        const [results] = await config.query('SELECT TOP 5 * FROM dbo.Produits');
+        const [results] = await config.query('SELECT TOP 5 * FROM Produits.Produits');
         console.log('Exemple de produits dans la base:', results);
         
         // Liste des tables
