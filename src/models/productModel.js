@@ -29,27 +29,27 @@ const Product = sequelize.define('Produits', {
     field: 'type_produit'
   },
   quantite_stock: {
-    type: DataTypes.INTEGER,
+    type: DataTypes.DECIMAL(10, 2),
     allowNull: false,
     field: 'quantite_stock'
   },
   taille_id: {
-    type: DataTypes.INTEGER,
+    type: DataTypes.STRING,
     allowNull: true,
     field: 'taille_id'
   },
   couleur_id: {
-    type: DataTypes.INTEGER,
+    type: DataTypes.STRING,
     allowNull: true,
     field: 'couleur_id'
   },
   marque_id: {
-    type: DataTypes.INTEGER,
+    type: DataTypes.STRING,
     allowNull: true,
     field: 'marque_id'
   },
   materiau_id: {
-    type: DataTypes.INTEGER,
+    type: DataTypes.STRING,
     allowNull: true,
     field: 'materiau_id'
   }

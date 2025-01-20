@@ -135,16 +135,6 @@ io.on("connection", (socket) => {
     });
 });
 
-// Vérifier la connexion
-sequelize.authenticate()
-    .then(() => {
-        console.log('✅ Connexion à la base de données réussie.');
-    })
-    .catch((err) => {
-        console.error('❌ Impossible de se connecter à la base de données:', err);
-        process.exit(1); 
-    });
-
 // Démarrage du serveur
 server.listen(8080, 'localhost', () => {
     console.log('Serveur démarré sur http://localhost:8080');

@@ -6,7 +6,7 @@ const createProduct = async (productData) => {
       nom: productData.nom,
       description: productData.description,
       prix: productData.prix,
-      type_produit: productData.type_produit || 1, // valeur par défaut
+      type_produit: productData.type_produit,
       quantite_stock: productData.quantite_stock,
       taille_id: productData.taille_id,
       couleur_id: productData.couleur_id,
