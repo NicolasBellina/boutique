@@ -32,7 +32,12 @@
     <main class="flex-shrink-0">
         <!-- Contenu principal ici -->
         <div class="container mt-4">
-            <h1>Nos produits</h1>
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1>Nos produits</h1>
+                <button class="btn btn-success" onclick="ajouterProduit()">
+                    <i class="fas fa-plus"></i> Ajouter un produit
+                </button>
+            </div>
             <div id="products-container" class="row">
                 <!-- Les produits seront affichés ici -->
             </div>
@@ -98,9 +103,15 @@
                                             <span class="badge bg-info">Marque: ${product.marque_id || 'N/A'}</span>
                                         </p>
                                     </div>
-                                    <div class="mt-3">
-                                        <button class="btn btn-outline-primary">
-                                            Voir détails
+                                    <div class="mt-3 d-flex gap-2 justify-content-between">
+                                        <button class="btn btn-outline-primary" onclick="voirDetails(${product.id_produit})">
+                                            <i class="fas fa-eye"></i> Voir détails
+                                        </button>
+                                        <button class="btn btn-warning" onclick="modifierProduit(${product.id_produit})">
+                                            <i class="fas fa-edit"></i> Modifier
+                                        </button>
+                                        <button class="btn btn-danger" onclick="supprimerProduit(${product.id_produit})">
+                                            <i class="fas fa-trash"></i> Supprimer
                                         </button>
                                     </div>
                                 </div>
@@ -123,6 +134,218 @@
 
         // Charger les produits au chargement de la page
         window.addEventListener('load', loadProducts);
+
+        // // Ajoutez ces fonctions après loadProducts()
+        // async function modifierProduit(id) {
+        //     try {
+        //         if (confirm('Voulez-vous vraiment modifier ce produit ?')) {
+        //             const response = await fetch(`/api/products/${id}`, {
+        //                 method: 'PUT',
+        //                 headers: {
+        //                     'Content-Type': 'application/json'
+        //                 },
+        //                 body: JSON.stringify({
+        //                     // Ajoutez ici les données à modifier
+        //                 })
+        //             });
+                    
+        //             if (!response.ok) {
+        //                 throw new Error(`HTTP error! status: ${response.status}`);
+        //             }
+                    
+        //             alert('Produit modifié avec succès');
+        //             loadProducts(); // Recharger la liste des produits
+        //         }
+        //     } catch (error) {
+        //         console.error('Erreur lors de la modification:', error);
+        //         alert('Erreur lors de la modification du produit');
+        //     }
+        // }
+
+        // async function supprimerProduit(id) {
+        //     try {
+        //         if (confirm('Voulez-vous vraiment supprimer ce produit ?')) {
+        //             const response = await fetch(`/api/products/${id}`, {
+        //                 method: 'DELETE'
+        //             });
+                    
+        //             if (!response.ok) {
+        //                 throw new Error(`HTTP error! status: ${response.status}`);
+        //             }
+                    
+        //             alert('Produit supprimé avec succès');
+        //             loadProducts(); // Recharger la liste des produits
+        //         }
+        //     } catch (error) {
+        //         console.error('Erreur lors de la suppression:', error);
+        //         alert('Erreur lors de la suppression du produit');
+        //     }
+        // }
+
+        // Ajoutez cette fonction après loadProducts()
+        async function voirDetails(id) {
+            try {
+                const response = await fetch(`/api/products/${id}`, {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const product = await response.json();
+                
+                // Créer et afficher une modal avec les détails
+                const modalHtml = `
+                    <div class="modal fade" id="productModal" tabindex="-1">
+                        <div class="modal-dialog">
+                            <div class="modal-content ${document.body.classList.contains('bg-dark') ? 'bg-dark text-white' : ''}">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Détails du produit: ${product.nom}</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <p><strong>Description:</strong> ${product.description || 'Aucune description'}</p>
+                                    <p><strong>Prix:</strong> ${product.prix} €</p>
+                                    <p><strong>Stock:</strong> ${product.quantite_stock}</p>
+                                    <p><strong>Type:</strong> ${product.type_produit}</p>
+                                    <p><strong>Taille:</strong> ${product.taille_id || 'N/A'}</p>
+                                    <p><strong>Couleur:</strong> ${product.couleur_id || 'N/A'}</p>
+                                    <p><strong>Marque:</strong> ${product.marque_id || 'N/A'}</p>
+                                    <p><strong>Matériau:</strong> ${product.materiau_id || 'N/A'}</p>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                // Supprimer l'ancienne modal si elle existe
+                const oldModal = document.getElementById('productModal');
+                if (oldModal) {
+                    oldModal.remove();
+                }
+                
+                // Ajouter la nouvelle modal au document
+                document.body.insertAdjacentHTML('beforeend', modalHtml);
+                
+                // Afficher la modal
+                const modal = new bootstrap.Modal(document.getElementById('productModal'));
+                modal.show();
+                
+            } catch (error) {
+                console.error('Erreur lors de la récupération des détails:', error);
+                alert('Erreur lors de la récupération des détails du produit');
+            }
+        }
+
+        // Ajoutez cette fonction JavaScript après les autres fonctions
+        async function ajouterProduit() {
+            const modalHtml = `
+                <div class="modal fade" id="addProductModal" tabindex="-1">
+                    <div class="modal-dialog">
+                        <div class="modal-content ${document.body.classList.contains('bg-dark') ? 'bg-dark text-white' : ''}">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Ajouter un nouveau produit</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form id="addProductForm">
+                                    <div class="mb-3">
+                                        <label for="nom" class="form-label">Nom</label>
+                                        <input type="text" class="form-control" id="nom" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="description" class="form-label">Description</label>
+                                        <textarea class="form-control" id="description" rows="3"></textarea>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="prix" class="form-label">Prix</label>
+                                        <input type="number" class="form-control" id="prix" step="0.01" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="quantite_stock" class="form-label">Quantité en stock</label>
+                                        <input type="number" class="form-control" id="quantite_stock" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="taille_id" class="form-label">Taille</label>
+                                        <input type="text" class="form-control" id="taille_id">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="couleur_id" class="form-label">Couleur</label>
+                                        <input type="text" class="form-control" id="couleur_id">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="marque_id" class="form-label">Marque</label>
+                                        <input type="text" class="form-control" id="marque_id">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="materiau_id" class="form-label">Matériau</label>
+                                        <input type="text" class="form-control" id="materiau_id">
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                                <button type="button" class="btn btn-primary" onclick="soumettreNouveauProduit()">Ajouter</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            document.body.insertAdjacentHTML('beforeend', modalHtml);
+            const modal = new bootstrap.Modal(document.getElementById('addProductModal'));
+            modal.show();
+        }
+
+        async function soumettreNouveauProduit() {
+            try {
+                const formData = {
+                    nom: document.getElementById('nom').value,
+                    description: document.getElementById('description').value,
+                    prix: parseFloat(document.getElementById('prix').value),
+                    quantite_stock: parseInt(document.getElementById('quantite_stock').value),
+                    taille_id: document.getElementById('taille_id').value || null,
+                    couleur_id: document.getElementById('couleur_id').value || null,
+                    marque_id: document.getElementById('marque_id').value || null,
+                    materiau_id: document.getElementById('materiau_id').value || null
+                };
+
+                console.log('Envoi des données:', formData);
+
+                const response = await fetch('/api/products', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
+                }
+
+                const result = await response.json();
+                console.log('Réponse du serveur:', result);
+
+                const modal = bootstrap.Modal.getInstance(document.getElementById('addProductModal'));
+                modal.hide();
+                document.getElementById('addProductModal').remove();
+                
+                alert('Produit ajouté avec succès');
+                loadProducts();
+            } catch (error) {
+                console.error('Erreur détaillée:', error);
+                alert(`Erreur lors de l'ajout du produit: ${error.message}`);
+            }
+        }
     </script>
 </body>
 </html>
