@@ -46,14 +46,13 @@
         async function loadProducts() {
             try {
                 const response = await fetch('/api/products', {
-                    method: 'GET',
                     headers: {
                         'Accept': 'application/json'
                     }
                 });
                 
                 if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
+                    throw new Error(`Erreur HTTP: ${response.status}`);
                 }
                 
                 const products = await response.json();
@@ -108,8 +107,7 @@
                 
             } catch (error) {
                 console.error('Erreur:', error);
-                document.getElementById('products-container').innerHTML = 
-                    `<div class="alert alert-danger">Erreur lors du chargement des produits: ${error.message}</div>`;
+                alert('Erreur lors du chargement des produits');
             }
         }
 
@@ -127,41 +125,144 @@
                                 <form id="addProductForm">
                                     <div class="mb-3">
                                         <label for="nom" class="form-label">Nom</label>
-                                        <input type="text" class="form-control" id="nom" required>
+                                        <div class="input-group">
+                                            <span class="input-group-text">
+                                                <i class="fas fa-box"></i>
+                                            </span>
+                                            <input type="text" class="form-control" id="nom" required>
+                                        </div>
                                     </div>
                                     <div class="mb-3">
                                         <label for="description" class="form-label">Description</label>
-                                        <textarea class="form-control" id="description"></textarea>
+                                        <div class="input-group">
+                                            <span class="input-group-text">
+                                                <i class="fas fa-align-left"></i>
+                                            </span>
+                                            <textarea class="form-control" id="description"></textarea>
+                                        </div>
                                     </div>
                                     <div class="mb-3">
                                         <label for="prix" class="form-label">Prix</label>
-                                        <input type="number" class="form-control" id="prix" step="0.01" required>
+                                        <div class="input-group">
+                                            <span class="input-group-text">
+                                                <i class="fas fa-euro-sign"></i>
+                                            </span>
+                                            <input type="number" class="form-control" id="prix" step="0.01" required>
+                                        </div>
                                     </div>
                                     <div class="mb-3">
                                         <label for="quantite_stock" class="form-label">Stock</label>
-                                        <input type="number" class="form-control" id="quantite_stock" required>
+                                        <div class="input-group">
+                                            <span class="input-group-text">
+                                                <i class="fas fa-warehouse"></i>
+                                            </span>
+                                            <input type="number" class="form-control" id="quantite_stock" required>
+                                        </div>
                                     </div>
                                     <div class="mb-3">
-                                        <label for="type_produit" class="form-label">Type</label>
-                                        <input type="text" class="form-control" id="type_produit">
+                                        <label for="type_produit" class="form-label">Type de produit</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text">
+                                                <i class="fas fa-tags"></i>
+                                            </span>
+                                            <select class="form-select" id="type_produit" required>
+                                                <option value="">Sélectionner une catégorie</option>
+                                                <optgroup label="Vêtements">
+                                                    <option value="T-shirt">T-shirt</option>
+                                                    <option value="Pantalon">Pantalon</option>
+                                                    <option value="Robe">Robe</option>
+                                                    <option value="Pull">Pull</option>
+                                                    <option value="Veste">Veste</option>
+                                                    <option value="Chemise">Chemise</option>
+                                                    <option value="Jupe">Jupe</option>
+                                                    <option value="Short">Short</option>
+                                                </optgroup>
+                                                <optgroup label="Chaussures">
+                                                    <option value="Baskets">Baskets</option>
+                                                    <option value="Bottes">Bottes</option>
+                                                    <option value="Sandales">Sandales</option>
+                                                    <option value="Escarpins">Escarpins</option>
+                                                    <option value="Mocassins">Mocassins</option>
+                                                </optgroup>
+                                                <optgroup label="Accessoires">
+                                                    <option value="Sac">Sac</option>
+                                                    <option value="Ceinture">Ceinture</option>
+                                                    <option value="Écharpe">Écharpe</option>
+                                                    <option value="Bonnet">Bonnet</option>
+                                                    <option value="Casquette">Casquette</option>
+                                                    <option value="Bijoux">Bijoux</option>
+                                                </optgroup>
+                                                <optgroup label="Sport">
+                                                    <option value="Maillot de sport">Maillot de sport</option>
+                                                    <option value="Legging">Legging</option>
+                                                    <option value="Short de sport">Short de sport</option>
+                                                    <option value="Survêtement">Survêtement</option>
+                                                </optgroup>
+                                            </select>
+                                        </div>
                                     </div>
                                     <div class="mb-3">
                                         <label for="taille_id" class="form-label">Taille</label>
-                                        <input type="text" class="form-control" id="taille_id">
+                                        <div class="input-group">
+                                            <span class="input-group-text">
+                                                <i class="fas fa-ruler"></i>
+                                            </span>
+                                            <input type="text" class="form-control" id="taille_id">
+                                        </div>
                                     </div>
                                     <div class="mb-3">
                                         <label for="couleur_id" class="form-label">Couleur</label>
-                                        <input type="text" class="form-control" id="couleur_id">
+                                        <div class="input-group">
+                                            <span class="input-group-text">
+                                                <i class="fas fa-palette"></i>
+                                            </span>
+                                            <select class="form-select" id="couleur_id" required>
+                                                <option value="">Sélectionner une couleur</option>
+                                                <option value="Noir">Noir</option>
+                                                <option value="Blanc">Blanc</option>
+                                                <option value="Rouge">Rouge</option>
+                                                <option value="Bleu">Bleu</option>
+                                                <option value="Vert">Vert</option>
+                                                <option value="Gris">Gris</option>
+                                                <option value="Beige">Beige</option>
+                                                <option value="Marine">Marine</option>
+                                            </select>
+                                        </div>
                                     </div>
                                     <div class="mb-3">
                                         <label for="marque_id" class="form-label">Marque</label>
-                                        <input type="text" class="form-control" id="marque_id">
+                                        <div class="input-group">
+                                            <span class="input-group-text">
+                                                <i class="fas fa-trademark"></i>
+                                            </span>
+                                            <select class="form-select" id="marque_id" required>
+                                                <option value="">Sélectionner une marque</option>
+                                                <optgroup label="Marques de luxe">
+                                                    <option value="Ralph Lauren">Ralph Lauren</option>
+                                                    <option value="Tommy Hilfiger">Tommy Hilfiger</option>
+                                                    <option value="Lacoste">Lacoste</option>
+                                                    <option value="Calvin Klein">Calvin Klein</option>
+                                                </optgroup>
+                                                <optgroup label="Marques sportives">
+                                                    <option value="Nike">Nike</option>
+                                                    <option value="Adidas">Adidas</option>
+                                                    <option value="Puma">Puma</option>
+                                                    <option value="Under Armour">Under Armour</option>
+                                                </optgroup>
+                                                <optgroup label="Fast Fashion">
+                                                    <option value="Zara">Zara</option>
+                                                    <option value="H&M">H&M</option>
+                                                </optgroup>
+                                            </select>
+                                        </div>
                                     </div>
                                 </form>
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
-                                <button type="button" class="btn btn-primary" onclick="soumettreNouveauProduit()">Ajouter</button>
+                                <button type="button" class="btn btn-primary" onclick="soumettreNouveauProduit()">
+                                </i> Ajouter
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -196,8 +297,7 @@
                 });
 
                 if (!response.ok) {
-                    const errorData = await response.json();
-                    throw new Error(errorData.message || `Erreur HTTP: ${response.status}`);
+                    throw new Error(`Erreur HTTP: ${response.status}`);
                 }
 
                 const modal = bootstrap.Modal.getInstance(document.getElementById('addProductModal'));
@@ -230,35 +330,136 @@
                                     <form id="editProductForm">
                                         <div class="mb-3">
                                             <label for="edit_nom" class="form-label">Nom</label>
-                                            <input type="text" class="form-control" id="edit_nom" value="${product.nom}" required>
+                                            <div class="input-group">
+                                                <span class="input-group-text">
+                                                    <i class="fas fa-box"></i>
+                                                </span>
+                                                <input type="text" class="form-control" id="edit_nom" value="${product.nom}" required>
+                                            </div>
                                         </div>
                                         <div class="mb-3">
                                             <label for="edit_description" class="form-label">Description</label>
-                                            <textarea class="form-control" id="edit_description">${product.description || ''}</textarea>
+                                            <div class="input-group">
+                                                <span class="input-group-text">
+                                                    <i class="fas fa-align-left"></i>
+                                                </span>
+                                                <textarea class="form-control" id="edit_description">${product.description || ''}</textarea>
+                                            </div>
                                         </div>
                                         <div class="mb-3">
                                             <label for="edit_prix" class="form-label">Prix</label>
-                                            <input type="number" class="form-control" id="edit_prix" step="0.01" value="${product.prix}" required>
+                                            <div class="input-group">
+                                                <span class="input-group-text">
+                                                    <i class="fas fa-euro-sign"></i>
+                                                </span>
+                                                <input type="number" class="form-control" id="edit_prix" step="0.01" value="${product.prix}" required>
+                                            </div>
                                         </div>
                                         <div class="mb-3">
                                             <label for="edit_quantite_stock" class="form-label">Stock</label>
-                                            <input type="number" class="form-control" id="edit_quantite_stock" value="${product.quantite_stock}" required>
+                                            <div class="input-group">
+                                                <span class="input-group-text">
+                                                    <i class="fas fa-warehouse"></i>
+                                                </span>
+                                                <input type="number" class="form-control" id="edit_quantite_stock" value="${product.quantite_stock}" required>
+                                            </div>
                                         </div>
                                         <div class="mb-3">
-                                            <label for="edit_type_produit" class="form-label">Type</label>
-                                            <input type="text" class="form-control" id="edit_type_produit" value="${product.type_produit || ''}">
+                                            <label for="edit_type_produit" class="form-label">Type de produit</label>
+                                            <div class="input-group">
+                                                <span class="input-group-text">
+                                                    <i class="fas fa-tags"></i>
+                                                </span>
+                                                <select class="form-select" id="edit_type_produit" required>
+                                                    <option value="">Sélectionner une catégorie</option>
+                                                    <optgroup label="Vêtements">
+                                                        <option value="T-shirt" ${product.type_produit === 'T-shirt' ? 'selected' : ''}>T-shirt</option>
+                                                        <option value="Pantalon" ${product.type_produit === 'Pantalon' ? 'selected' : ''}>Pantalon</option>
+                                                        <option value="Robe" ${product.type_produit === 'Robe' ? 'selected' : ''}>Robe</option>
+                                                        <option value="Pull" ${product.type_produit === 'Pull' ? 'selected' : ''}>Pull</option>
+                                                        <option value="Veste" ${product.type_produit === 'Veste' ? 'selected' : ''}>Veste</option>
+                                                        <option value="Chemise" ${product.type_produit === 'Chemise' ? 'selected' : ''}>Chemise</option>
+                                                        <option value="Jupe" ${product.type_produit === 'Jupe' ? 'selected' : ''}>Jupe</option>
+                                                        <option value="Short" ${product.type_produit === 'Short' ? 'selected' : ''}>Short</option>
+                                                    </optgroup>
+                                                    <optgroup label="Chaussures">
+                                                        <option value="Baskets" ${product.type_produit === 'Baskets' ? 'selected' : ''}>Baskets</option>
+                                                        <option value="Bottes" ${product.type_produit === 'Bottes' ? 'selected' : ''}>Bottes</option>
+                                                        <option value="Sandales" ${product.type_produit === 'Sandales' ? 'selected' : ''}>Sandales</option>
+                                                        <option value="Escarpins" ${product.type_produit === 'Escarpins' ? 'selected' : ''}>Escarpins</option>
+                                                        <option value="Mocassins" ${product.type_produit === 'Mocassins' ? 'selected' : ''}>Mocassins</option>
+                                                    </optgroup>
+                                                    <optgroup label="Accessoires">
+                                                        <option value="Sac" ${product.type_produit === 'Sac' ? 'selected' : ''}>Sac</option>
+                                                        <option value="Ceinture" ${product.type_produit === 'Ceinture' ? 'selected' : ''}>Ceinture</option>
+                                                        <option value="Écharpe" ${product.type_produit === 'Écharpe' ? 'selected' : ''}>Écharpe</option>
+                                                        <option value="Bonnet" ${product.type_produit === 'Bonnet' ? 'selected' : ''}>Bonnet</option>
+                                                        <option value="Casquette" ${product.type_produit === 'Casquette' ? 'selected' : ''}>Casquette</option>
+                                                        <option value="Bijoux" ${product.type_produit === 'Bijoux' ? 'selected' : ''}>Bijoux</option>
+                                                    </optgroup>
+                                                    <optgroup label="Sport">
+                                                        <option value="Maillot de sport" ${product.type_produit === 'Maillot de sport' ? 'selected' : ''}>Maillot de sport</option>
+                                                        <option value="Legging" ${product.type_produit === 'Legging' ? 'selected' : ''}>Legging</option>
+                                                        <option value="Short de sport" ${product.type_produit === 'Short de sport' ? 'selected' : ''}>Short de sport</option>
+                                                        <option value="Survêtement" ${product.type_produit === 'Survêtement' ? 'selected' : ''}>Survêtement</option>
+                                                    </optgroup>
+                                                </select>
+                                            </div>
                                         </div>
                                         <div class="mb-3">
                                             <label for="edit_taille_id" class="form-label">Taille</label>
-                                            <input type="text" class="form-control" id="edit_taille_id" value="${product.taille_id || ''}">
+                                            <div class="input-group">
+                                                <span class="input-group-text">
+                                                    <i class="fas fa-ruler"></i>
+                                                </span>
+                                                <input type="text" class="form-control" id="edit_taille_id" value="${product.taille_id || ''}">
+                                            </div>
                                         </div>
                                         <div class="mb-3">
                                             <label for="edit_couleur_id" class="form-label">Couleur</label>
-                                            <input type="text" class="form-control" id="edit_couleur_id" value="${product.couleur_id || ''}">
+                                            <div class="input-group">
+                                                <span class="input-group-text">
+                                                    <i class="fas fa-palette"></i>
+                                                </span>
+                                                <select class="form-select" id="edit_couleur_id" required>
+                                                    <option value="">Sélectionner une couleur</option>
+                                                    <option value="Noir" ${product.couleur_id === 'Noir' ? 'selected' : ''}>Noir</option>
+                                                    <option value="Blanc" ${product.couleur_id === 'Blanc' ? 'selected' : ''}>Blanc</option>
+                                                    <option value="Rouge" ${product.couleur_id === 'Rouge' ? 'selected' : ''}>Rouge</option>
+                                                    <option value="Bleu" ${product.couleur_id === 'Bleu' ? 'selected' : ''}>Bleu</option>
+                                                    <option value="Vert" ${product.couleur_id === 'Vert' ? 'selected' : ''}>Vert</option>
+                                                    <option value="Gris" ${product.couleur_id === 'Gris' ? 'selected' : ''}>Gris</option>
+                                                    <option value="Beige" ${product.couleur_id === 'Beige' ? 'selected' : ''}>Beige</option>
+                                                    <option value="Marine" ${product.couleur_id === 'Marine' ? 'selected' : ''}>Marine</option>
+                                                </select>
+                                            </div>
                                         </div>
                                         <div class="mb-3">
                                             <label for="edit_marque_id" class="form-label">Marque</label>
-                                            <input type="text" class="form-control" id="edit_marque_id" value="${product.marque_id || ''}">
+                                            <div class="input-group">
+                                                <span class="input-group-text">
+                                                    <i class="fas fa-trademark"></i>
+                                                </span>
+                                                <select class="form-select" id="edit_marque_id" required>
+                                                    <option value="">Sélectionner une marque</option>
+                                                    <optgroup label="Marques de luxe">
+                                                        <option value="Ralph Lauren" ${product.marque_id === 'Ralph Lauren' ? 'selected' : ''}>Ralph Lauren</option>
+                                                        <option value="Tommy Hilfiger" ${product.marque_id === 'Tommy Hilfiger' ? 'selected' : ''}>Tommy Hilfiger</option>
+                                                        <option value="Lacoste" ${product.marque_id === 'Lacoste' ? 'selected' : ''}>Lacoste</option>
+                                                        <option value="Calvin Klein" ${product.marque_id === 'Calvin Klein' ? 'selected' : ''}>Calvin Klein</option>
+                                                    </optgroup>
+                                                    <optgroup label="Marques sportives">
+                                                        <option value="Nike" ${product.marque_id === 'Nike' ? 'selected' : ''}>Nike</option>
+                                                        <option value="Adidas" ${product.marque_id === 'Adidas' ? 'selected' : ''}>Adidas</option>
+                                                        <option value="Puma" ${product.marque_id === 'Puma' ? 'selected' : ''}>Puma</option>
+                                                        <option value="Under Armour" ${product.marque_id === 'Under Armour' ? 'selected' : ''}>Under Armour</option>
+                                                    </optgroup>
+                                                    <optgroup label="Fast Fashion">
+                                                        <option value="Zara" ${product.marque_id === 'Zara' ? 'selected' : ''}>Zara</option>
+                                                        <option value="H&M" ${product.marque_id === 'H&M' ? 'selected' : ''}>H&M</option>
+                                                    </optgroup>
+                                                </select>
+                                            </div>
                                         </div>
                                     </form>
                                 </div>
@@ -345,16 +546,27 @@
                                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                 </div>
                                 <div class="modal-body">
-                                    <p><strong>Description:</strong> ${product.description || 'Aucune description'}</p>
-                                    <p><strong>Prix:</strong> ${product.prix} €</p>
-                                    <p><strong>Stock:</strong> ${product.quantite_stock}</p>
-                                    <p><strong>Type:</strong> ${product.type_produit || 'N/A'}</p>
-                                    <p><strong>Taille:</strong> ${product.taille_id || 'N/A'}</p>
-                                    <p><strong>Couleur:</strong> ${product.couleur_id || 'N/A'}</p>
-                                    <p><strong>Marque:</strong> ${product.marque_id || 'N/A'}</p>
+                                    <div class="card ${document.body.classList.contains('bg-dark') ? 'bg-dark text-white' : ''} border-primary">
+                                        <div class="card-body">
+                                            <h6 class="card-subtitle mb-3 text-muted">Informations générales</h6>
+                                            <p><strong>Nom:</strong> ${product.nom}</p>
+                                            <p><strong>Description:</strong> ${product.description || 'Aucune description'}</p>
+                                            <p><strong>Prix:</strong> ${product.prix.toLocaleString('fr-FR')} €</p>
+                                            <p><strong>Stock:</strong> ${product.quantite_stock}</p>
+                                            
+                                            <h6 class="card-subtitle mb-3 mt-4 text-muted">Caractéristiques</h6>
+                                            <p><strong>Type:</strong> ${product.type_produit || 'N/A'}</p>
+                                            <p><strong>Taille:</strong> ${product.taille_id || 'N/A'}</p>
+                                            <p><strong>Couleur:</strong> ${product.couleur_id || 'N/A'}</p>
+                                            <p><strong>Marque:</strong> ${product.marque_id || 'N/A'}</p>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                                    <button type="button" class="btn btn-primary" onclick="modifierProduit(${product.id_produit})">
+                                        <i class="fas fa-edit"></i> Modifier
+                                    </button>
                                 </div>
                             </div>
                         </div>

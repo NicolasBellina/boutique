@@ -1,16 +1,12 @@
 import http from 'http';
-import url from 'url';
 import fs from 'fs';
 import ejs from 'ejs';
-import { parse } from 'cookie';
 import { Server } from 'socket.io';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import determineCoupureGeneric from '../API/src/DAB/dab.js';
-import sequelize from './database.js';
-import ProductController from './src/controllers/productController.js';
 import express from 'express';
 import productRoutes from './src/routes/productRoutes.js';
+import employesRoutes from './src/routes/employesRoutes.js';
 
 // Configuration des chemins pour ES modules
 const __filename = fileURLToPath(import.meta.url);
@@ -22,80 +18,62 @@ const app = express();
 // Middleware pour parser le JSON
 app.use(express.json());
 
+// Configuration des routes statiques
+app.use(express.static(path.join(__dirname, 'public')));
+
 // Routes API
 app.use('/api', productRoutes);
+app.use('/api', employesRoutes);
 
-// Création du serveur HTTP
-const server = http.createServer(async (request, response) => {
-    console.log('URL demandée : %s %s', request.method, request.url);
-    const pathname = url.parse(request.url, true).pathname;
-    const cookies = request.headers.cookie ? parse(request.headers.cookie) : {};
-    const isAdmin = cookies.isAdmin === 'true';
-
-    // Si c'est une route API, laisser Express la gérer
-    if (pathname.startsWith('/api/')) {
-        return app(request, response);
-    }
-
-    // Gestion des simulations DAB (dab.js)
-    if (pathname === '/simulate-withdrawal' && request.method === 'POST') {
-        let body = '';
-        request.on('data', chunk => body += chunk);
-        request.on('end', () => {
-            try {
-                const data = JSON.parse(body);
-                const result = determineCoupureGeneric({
-                    montant: data.montant,
-                    typeDevise: data.typeDevise
-                });
-                response.writeHead(200, { 'Content-Type': 'text/plain' });
-                response.end(result);
-            } catch (error) {
-                console.error('Erreur simulation:', error);
-                response.writeHead(400, { 'Content-Type': 'text/plain' });
-                response.end('Erreur lors de la simulation');
-            }
-        });
-        return;
-    }
-
-    // Rendu des pages
-    try {
-        const routes = {
-            
-            '/': { template: 'src/pages/home.ejs', title: 'Accueil' },
-            '/about': { template: 'src/pages/about.ejs', title: 'À propos' },
-            '/socket': { template: 'src/pages/socket.ejs', title: 'Chat' },
-            '/products': { template: 'src/pages/products.ejs', title: 'Produits' },
-            '/contact': { template: 'src/pages/contact.ejs', title: 'Contact' },
-        };
-
-        const route = routes[pathname] || { template: 'src/pages/404.ejs', title: '404' };
-        
-        // Utilisation de path.join pour créer le chemin correct
-        const templatePath = path.join(__dirname, route.template);
-        console.log('Chemin du template:', templatePath); 
-        const content = fs.readFileSync(templatePath, 'utf8');
-        
-        const rendered = ejs.render(content, {
-            isAdmin,
-            title: `${route.title} - DAB Simulator`
-        }, { 
-            filename: templatePath,
-            views: [path.join(__dirname, '..')] 
-        });
-
-        response.writeHead(200, { 'Content-Type': 'text/html' });
-        response.end(rendered);
-    } catch (error) {
-        console.error('Erreur lors du rendu de la page:', error); 
-        response.writeHead(500, { 'Content-Type': 'text/html' });
-        response.end('<h1>500 - Erreur interne du serveur</h1>');
-    }
-});
+// Création du serveur HTTP avec Express
+const server = http.createServer(app);
 
 // Configuration de Socket.IO
 const io = new Server(server);
+
+// Gestion des routes pour les pages
+app.get('/', (req, res) => {
+    renderPage(res, 'src/pages/home.ejs', 'Accueil');
+});
+
+app.get('/about', (req, res) => {
+    renderPage(res, 'src/pages/about.ejs', 'À propos');
+});
+
+app.get('/socket', (req, res) => {
+    renderPage(res, 'src/pages/socket.ejs', 'Chat');
+});
+
+app.get('/employes', (req, res) => {
+    renderPage(res, 'src/pages/employes.ejs', 'Employés');
+});
+
+app.get('/products', (req, res) => {
+    renderPage(res, 'src/pages/products.ejs', 'Produits');
+});
+
+app.get('/contact', (req, res) => {
+    renderPage(res, 'src/pages/contact.ejs', 'Contact');
+});
+
+// Fonction pour rendre les pages
+function renderPage(res, template, title) {
+    try {
+        const templatePath = path.join(__dirname, template);
+        const content = fs.readFileSync(templatePath, 'utf8');
+        const rendered = ejs.render(content, {
+            isAdmin: false, // Vous pouvez gérer cela via les cookies si nécessaire
+            title: `${title} - DAB Simulator`
+        }, {
+            filename: templatePath,
+            views: [path.join(__dirname, '..')]
+        });
+        res.send(rendered);
+    } catch (error) {
+        console.error('Erreur lors du rendu de la page:', error);
+        res.status(500).send('<h1>500 - Erreur interne du serveur</h1>');
+    }
+}
 
 // Gestion des connexions WebSocket
 io.on("connection", (socket) => {
@@ -117,14 +95,6 @@ io.on("connection", (socket) => {
         });
     });
 
-    socket.on("withdrawal_request", (data) => {
-        io.emit("withdrawal_result", {
-            type: "withdrawal",
-            user: socket.username,
-            result: data.result
-        });
-    });
-
     socket.on("disconnect", () => {
         if (socket.username) {
             io.emit("message", {
@@ -136,8 +106,9 @@ io.on("connection", (socket) => {
 });
 
 // Démarrage du serveur
-server.listen(8080, 'localhost', () => {
-    console.log('Serveur démarré sur http://localhost:8080');
+const PORT = process.env.PORT || 8080;
+server.listen(PORT, () => {
+    console.log(`Serveur démarré sur http://localhost:${PORT}`);
 });
 
 
