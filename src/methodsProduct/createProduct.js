@@ -11,7 +11,6 @@ const createProduct = async (productData) => {
       taille_id: productData.taille_id,
       couleur_id: productData.couleur_id,
       marque_id: productData.marque_id,
-      materiau_id: productData.materiau_id
     });
     return product;
   } catch (error) {

@@ -13,7 +13,6 @@ const getProductById = async (id) => {
         'taille_id',
         'couleur_id',
         'marque_id',
-        'materiau_id'
       ]
     });
 

@@ -63,6 +63,7 @@ const ProductController = {
         try {
             const id = req.params.id;
             const product = await deleteProduct(id);
+            console.log('Produit supprimé:', product);
             res.status(204).json(product);
         } catch (error) {
             res.status(500).json({ message: 'Erreur lors de la suppression du produit' });

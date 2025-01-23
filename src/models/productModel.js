@@ -48,11 +48,6 @@ const Product = sequelize.define('Produits', {
     allowNull: true,
     field: 'marque_id'
   },
-  materiau_id: {
-    type: DataTypes.STRING,
-    allowNull: true,
-    field: 'materiau_id'
-  }
 }, {
   tableName: 'Produits',
   schema: 'Produits',

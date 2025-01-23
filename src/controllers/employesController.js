@@ -49,7 +49,6 @@ const EmployeController = {
             console.log('Employé créé:', employe);
             res.status(201).json(employe);
         } catch (error) {
-            console.error('Erreur lors de la création du employé:', error);
             res.status(500).json({ 
                 message: 'Erreur lors de la création du employé',
             });

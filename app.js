@@ -7,6 +7,7 @@ import { fileURLToPath } from 'url';
 import express from 'express';
 import productRoutes from './src/routes/productRoutes.js';
 import employesRoutes from './src/routes/employesRoutes.js';
+import { verifyToken, requireAdmin, checkRole } from './src/middleware/JWT.js';
 
 // Configuration des chemins pour ES modules
 const __filename = fileURLToPath(import.meta.url);
@@ -21,9 +22,33 @@ app.use(express.json());
 // Configuration des routes statiques
 app.use(express.static(path.join(__dirname, 'public')));
 
+
 // Routes API
 app.use('/api', productRoutes);
 app.use('/api', employesRoutes);
+
+// Routes publiques
+app.get('/login', (req, res) => {
+    res.send('Login page');
+});
+app.post('/login', (req, res) => {
+    // Handle login logic here
+    res.send('Login route');
+});
+
+// Routes protégées
+app.use('/api/employes', verifyToken); // Protection de toutes les routes employés
+app.use('/api/products', verifyToken); // Protection de toutes les routes produits
+
+// Routes avec vérification de rôle
+app.get('/api/admin', verifyToken, requireAdmin, (req, res) => {
+    res.json({ message: 'Route admin' });
+});
+
+// Routes avec vérification de rôles spécifiques
+app.get('/api/manager', verifyToken, checkRole(['admin', 'manager']), (req, res) => {
+    res.json({ message: 'Route manager' });
+});
 
 // Création du serveur HTTP avec Express
 const server = http.createServer(app);
