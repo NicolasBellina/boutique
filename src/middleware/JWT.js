@@ -9,30 +9,33 @@ const JWT_SECRET = process.env.JWT_SECRET;
 
 // Middleware de vérification du token
 const verifyToken = (req, res, next) => {
-    const token = req.headers['authorization']?.split(' ')[1] || req.cookies?.token;
+    const token = req.headers['authorization']?.split(' ')[1];
 
     if (!token) {
         return res.status(401).json({ message: 'Token manquant' });
     }
 
     try {
-        const decoded = jwt.verify(token, JWT_SECRET);
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        console.log('Token décodé:', decoded);
         req.user = decoded;
         next();
     } catch (error) {
-        if (error.name === 'TokenExpiredError') {
-            return res.status(401).json({ message: 'Token expiré' });
-        }
+        console.error('Erreur JWT:', error);
         return res.status(401).json({ message: 'Token invalide' });
     }
 };
 
 // Générer un token JWT
-const generateToken = (userData) => {
+const generateToken = (user) => {
     return jwt.sign(
-        userData,
-        JWT_SECRET,
-        { expiresIn: '1h' } // Le token expire après 1 heure
+        { 
+            id: user.id,
+            username: user.username,
+            role: user.role 
+        },
+        process.env.JWT_SECRET,
+        { expiresIn: '24h' }
     );
 };
 
@@ -77,7 +80,7 @@ const refreshToken = (token) => {
 
 export {
     verifyToken,
-    generateToken,
+    generateToken, 
     decodeToken,
     requireAdmin,
     checkRole,

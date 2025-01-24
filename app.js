@@ -7,7 +7,7 @@ import { fileURLToPath } from 'url';
 import express from 'express';
 import productRoutes from './src/routes/productRoutes.js';
 import employesRoutes from './src/routes/employesRoutes.js';
-import { verifyToken, requireAdmin, checkRole } from './src/middleware/JWT.js';
+import { verifyToken, generateToken, requireAdmin, checkRole } from './src/middleware/JWT.js';
 
 // Configuration des chemins pour ES modules
 const __filename = fileURLToPath(import.meta.url);
@@ -18,6 +18,12 @@ const app = express();
 
 // Middleware pour parser le JSON
 app.use(express.json());
+
+// Middleware pour logger les requêtes
+app.use((req, res, next) => {
+    console.log(`Requête reçue : ${req.method} ${req.url}`);
+    next();
+});
 
 // Configuration des routes statiques
 app.use(express.static(path.join(__dirname, 'public')));
@@ -34,6 +40,18 @@ app.get('/login', (req, res) => {
 app.post('/login', (req, res) => {
     // Handle login logic here
     res.send('Login route');
+});
+
+// Route pour générer un token JWT
+app.post('/api/token', (req, res) => {
+    const { username, role } = req.body;
+    
+    if (!username || !role) {
+        return res.status(400).json({ message: 'Username et role requis' });
+    }
+
+    const token = generateToken({ username, role });
+    res.json({ token });
 });
 
 // Routes protégées
