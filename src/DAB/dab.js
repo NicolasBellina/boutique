@@ -51,13 +51,9 @@ function determineCoupureGeneric(params) {
             { valeur: 20, type: 'billet' },
             { valeur: 10, type: 'billet' },
             { valeur: 5, type: 'billet' },
-            { valeur: 2, type: 'billet' },
             { valeur: 1, type: 'billet' },
             { valeur: 0.5, type: 'pièce' },
-            { valeur: 0.25, type: 'pièce' },
-            { valeur: 0.1, type: 'pièce' },
-            { valeur: 0.05, type: 'pièce' },
-            { valeur: 0.01, type: 'pièce' }
+            { valeur: 0.1, type: 'pièce' }
         ]
     };
 
@@ -76,7 +72,7 @@ function determineCoupureGeneric(params) {
         const nombre = Math.floor(montantRestant / valeur);
         if (nombre > 0) {
             repartition[valeur] = { nombre, type };
-            montantRestant = (montantRestant % valeur).toFixed(2);
+            montantRestant = parseFloat((montantRestant % valeur).toFixed(2));
         }
     }
 
@@ -100,15 +96,17 @@ function determineCoupureGeneric(params) {
     for (const [valeur, details] of Object.entries(repartition)) {
         if (details.type === 'pièce') {
             hasPieces = true;
-            if (valeur >= 1) {
-                message += `${details.nombre} pièce${details.nombre > 1 ? 's' : ''} de ${valeur} ${typeDevise}\n`;
-            } else {
-                const centimes = valeur * 100;
-                message += `${details.nombre} pièce${details.nombre > 1 ? 's' : ''} de ${centimes} centime${centimes > 1 ? 's' : ''}\n`;
-            }
+            const valeurAffichee = valeur >= 1 ? valeur : valeur * 100;
+            const unite = valeur >= 1 ? typeDevise : (typeDevise === 'YUAN' ? 'fen' : 'centimes');
+            message += `${details.nombre} pièce${details.nombre > 1 ? 's' : ''} de ${valeurAffichee} ${unite}\n`;
         }
     }
     if (!hasPieces) message += "Aucune pièce nécessaire\n";
+
+    // Vérifier s'il reste un montant non distribué
+    if (montantRestant > 0) {
+        message += `\nMontant non distribuable : ${montantRestant} ${typeDevise}`;
+    }
 
     return message;
 }

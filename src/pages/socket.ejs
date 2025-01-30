@@ -105,6 +105,25 @@
     <script>
         const socket = io();
         
+        // Liste des gros mots en français
+        const grosMots = [
+            'merde', 'putain', 'connard', 'connasse', 'salope', 'pute', 'enculé',
+            'bite', 'couille', 'foutre', 'cul', 'bordel', 'chier', 'con', 'conasse',
+            'salaud', 'bâtard', 'batard', 'pétasse', 'petasse', 'nique', 'niquer',
+            'encule', 'pd', 'fdp', 'ntm', 'tg', 'ta gueule', 'fuck', 'merdique',
+            'chiant', 'chiante', 'emmerde', 'emmerder', 'connerie', 'conne'
+        ];
+
+        // Fonction pour censurer les gros mots
+        function censurerMessage(message) {
+            let messageCensure = message.toLowerCase();
+            grosMots.forEach(mot => {
+                const regex = new RegExp('\\b' + mot + '\\b', 'gi');
+                messageCensure = messageCensure.replace(regex, 'X'.repeat(mot.length));
+            });
+            return messageCensure;
+        }
+        
         // Demande du nom d'utilisateur
         let username = prompt('Entrez votre nom d\'utilisateur:');
         while (!username) {
@@ -127,6 +146,9 @@
 
         // Écouter les messages du chat
         socket.on("chat_message", (message) => {
+            if (message.content) {
+                message.content = censurerMessage(message.content);
+            }
             appendMessage(message);
         });
 
@@ -139,26 +161,28 @@
             });
         });
 
-// Modifier la fonction appendMessage
-function appendMessage(message) {
-    const messageDiv = document.createElement('div');
-    messageDiv.classList.add('message', message.type);
+        // Fonction pour ajouter un message
+        function appendMessage(message) {
+            const messageDiv = document.createElement('div');
+            messageDiv.classList.add('message', message.type);
 
-    // Obtenir l'heure actuelle si message.time n'existe pas
-    const date = message.time ? new Date(message.time) : new Date();
-    const hours = `0${date.getHours()}`.slice(-2);
-    const minutes = `0${date.getMinutes()}`.slice(-2);
-    const time = `${hours}:${minutes}`;
+            // Obtenir l'heure actuelle
+            const date = new Date();
+            const hours = `0${date.getHours()}`.slice(-2);
+            const minutes = `0${date.getMinutes()}`.slice(-2);
+            const time = `${hours}:${minutes}`;
 
-    if (message.type === 'system') {
-        messageDiv.innerHTML = `<span class="time">${time}</span> ${message.content}`;
-    } else {
-        messageDiv.innerHTML = `<span class="time">${time}</span> <strong>${message.user}:</strong> ${message.content}`;
-    }
+            if (message.type === 'system') {
+                messageDiv.innerHTML = `<span class="time">${time}</span> ${message.content}`;
+            } else if (message.type === 'withdrawal') {
+                messageDiv.innerHTML = `<span class="time">${time}</span> <strong>${message.user}:</strong><br>${message.content}`;
+            } else {
+                messageDiv.innerHTML = `<span class="time">${time}</span> <strong>${message.user}:</strong> ${message.content}`;
+            }
 
-    chatMessages.appendChild(messageDiv);
-    chatMessages.scrollTop = chatMessages.scrollHeight;
-}
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
 
         // Envoi de messages
         chatForm.addEventListener('submit', (e) => {
@@ -166,7 +190,9 @@ function appendMessage(message) {
             const message = messageInput.value.trim();
             
             if (message) {
-                socket.emit("chat_message", message);
+                // Censurer le message avant de l'envoyer
+                const messageCensure = censurerMessage(message);
+                socket.emit("chat_message", messageCensure);
                 messageInput.value = '';
             }
         });
@@ -178,30 +204,29 @@ function appendMessage(message) {
             const amount = parseFloat(document.getElementById('amount').value);
             const currency = document.getElementById('currency').value;
 
-            try {
-                const response = await fetch('/simulate-withdrawal', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        montant: amount,
-                        typeDevise: currency
-                    })
+            // Vérification des entrées
+            if (isNaN(amount) || amount <= 0) {
+                appendMessage({
+                    type: 'system',
+                    content: 'Le montant doit être un nombre positif'
                 });
+                return;
+            }
 
-                const result = await response.text();
-                
-                // Émettre le résultat au chat
+            try {
+                // Émettre directement la demande de retrait via WebSocket
                 socket.emit("withdrawal_request", {
                     amount: amount,
-                    currency: currency,
-                    result: result
+                    currency: currency
                 });
 
                 // Réinitialiser le formulaire
                 dabForm.reset();
             } catch (error) {
+                appendMessage({
+                    type: 'system',
+                    content: `Erreur: ${error.message}`
+                });
                 console.error('Erreur:', error);
             }
         });

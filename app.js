@@ -6,8 +6,9 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import express from 'express';
 import productRoutes from './src/routes/productRoutes.js';
+import authRoutes from './src/routes/authRoutes.js';
 import employesRoutes from './src/routes/employesRoutes.js';
-import { verifyToken, generateToken, requireAdmin, checkRole } from './src/middleware/JWT.js';
+import commercialRoutes from './src/routes/commercialRoutes.js';
 
 // Configuration des chemins pour ES modules
 const __filename = fileURLToPath(import.meta.url);
@@ -32,6 +33,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Routes API
 app.use('/api', productRoutes);
 app.use('/api', employesRoutes);
+app.use('/api', commercialRoutes);
+app.use('/api', authRoutes);
 
 // Routes publiques
 app.get('/login', (req, res) => {
@@ -42,31 +45,11 @@ app.post('/login', (req, res) => {
     res.send('Login route');
 });
 
-// Route pour générer un token JWT
-app.post('/api/token', (req, res) => {
-    const { username, role } = req.body;
-    
-    if (!username || !role) {
-        return res.status(400).json({ message: 'Username et role requis' });
-    }
-
-    const token = generateToken({ username, role });
-    res.json({ token });
-});
-
 // Routes protégées
-app.use('/api/employes', verifyToken); // Protection de toutes les routes employés
-app.use('/api/products', verifyToken); // Protection de toutes les routes produits
-
-// Routes avec vérification de rôle
-app.get('/api/admin', verifyToken, requireAdmin, (req, res) => {
-    res.json({ message: 'Route admin' });
-});
-
-// Routes avec vérification de rôles spécifiques
-app.get('/api/manager', verifyToken, checkRole(['admin', 'manager']), (req, res) => {
-    res.json({ message: 'Route manager' });
-});
+app.use('/api/employes', employesRoutes); // Protection de toutes les routes employés
+app.use('/api/products', productRoutes); // Protection de toutes les routes produits
+app.use('/api/commercials', commercialRoutes); // Protection de toutes les routes commerciaux
+app.use('/api/auth', authRoutes); // Protection de toutes les routes auth
 
 // Création du serveur HTTP avec Express
 const server = http.createServer(app);
@@ -93,6 +76,10 @@ app.get('/employes', (req, res) => {
 
 app.get('/products', (req, res) => {
     renderPage(res, 'src/pages/products.ejs', 'Produits');
+});
+
+app.get('/commercials', (req, res) => {
+    renderPage(res, 'src/pages/commercial.ejs', 'Commercials');
 });
 
 app.get('/contact', (req, res) => {
@@ -153,5 +140,3 @@ const PORT = process.env.PORT || 8080;
 server.listen(PORT, () => {
     console.log(`Serveur démarré sur http://localhost:${PORT}`);
 });
-
-
