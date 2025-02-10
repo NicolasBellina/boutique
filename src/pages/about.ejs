@@ -111,19 +111,17 @@
             const amount = parseFloat(document.getElementById('amount').value);
             const currency = document.getElementById('currency').value;
 
-            // Vérification des entrées
             if (isNaN(amount) || amount <= 0) {
                 showError('Le montant doit être un nombre positif');
                 return;
             }
 
-            // Animation de chargement
             resultDiv.textContent = 'Traitement en cours...';
             resultDiv.style.display = 'block';
             resultDiv.className = 'result';
 
             try {
-                const response = await fetch('/simulate-withdrawal', {
+                const response = await fetch('/api/dab/withdrawal', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -138,8 +136,8 @@
                     throw new Error(`Erreur HTTP: ${response.status}`);
                 }
 
-                const result = await response.text();
-                showResult(result);
+                const data = await response.json();
+                showResult(data.message || data.result);
                 dabForm.reset();
             } catch (error) {
                 showError('Une erreur est survenue lors de la simulation. Veuillez réessayer.');

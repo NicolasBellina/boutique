@@ -62,11 +62,29 @@ const ProductController = {
     deleteProduct: async (req, res) => {
         try {
             const id = req.params.id;
+            console.log('Tentative de suppression du produit avec ID:', id);
+            
             const product = await deleteProduct(id);
-            console.log('Produit supprimé:', product);
-            res.status(204).json(product);
+            console.log('Produit supprimé avec succès:', product);
+            
+            res.status(200).json({
+                success: true,
+                message: 'Produit supprimé avec succès',
+                data: product
+            });
         } catch (error) {
-            res.status(500).json({ message: 'Erreur lors de la suppression du produit' });
+            console.error('Erreur lors de la suppression du produit:', error);
+            if (error.message.includes('Produit non trouvé')) {
+                res.status(404).json({
+                    success: false,
+                    message: error.message
+                });
+            } else {
+                res.status(500).json({
+                    success: false,
+                    message: error.message
+                });
+            }
         }
     }
 }

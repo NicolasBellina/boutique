@@ -1,5 +1,8 @@
 import express from 'express';
 import jwt from 'jsonwebtoken';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const router = express.Router();
 
@@ -10,7 +13,7 @@ const VALID_CREDENTIALS = {
 };
 
 // Clé secrète pour JWT (à mettre dans les variables d'environnement en production)
-const JWT_SECRET = 'votre_clé_secrète_super_sécurisée';
+const JWT_SECRET = process.env.JWT_SECRET;
 
 router.post('/login', async (req, res) => {
     try {

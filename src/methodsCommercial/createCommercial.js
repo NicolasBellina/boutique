@@ -1,18 +1,11 @@
 import Commercial from '../models/commercialModel.js';
 
-export default async function createCommercial(data) {
+const createCommercial = async (commercialData) => {
     try {
-        // Créer le commercial
-        const commercial = await Commercial.create({
-            nom: data.nom,
-            prenom: data.prenom,
-            email: data.email,
-            est_actif: data.est_actif
-        });
-
-        return commercial;
+        return await Commercial.create(commercialData);
     } catch (error) {
-        console.error('Erreur lors de la création du commercial:', error);
-        throw error;
+        throw new Error(`Erreur lors de la création du commercial: ${error}`);
     }
-}
+};
+
+export default createCommercial;

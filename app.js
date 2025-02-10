@@ -9,6 +9,7 @@ import productRoutes from './src/routes/productRoutes.js';
 import authRoutes from './src/routes/authRoutes.js';
 import employesRoutes from './src/routes/employesRoutes.js';
 import commercialRoutes from './src/routes/commercialRoutes.js';
+import determineCoupureGeneric from './src/DAB/dab.js';
 
 // Configuration des chemins pour ES modules
 const __filename = fileURLToPath(import.meta.url);
@@ -46,10 +47,30 @@ app.post('/login', (req, res) => {
 });
 
 // Routes protégées
-app.use('/api/employes', employesRoutes); // Protection de toutes les routes employés
-app.use('/api/products', productRoutes); // Protection de toutes les routes produits
-app.use('/api/commercials', commercialRoutes); // Protection de toutes les routes commerciaux
-app.use('/api/auth', authRoutes); // Protection de toutes les routes auth
+app.use('/api/employes', employesRoutes); 
+app.use('/api/products', productRoutes); 
+app.use('/api/commercials', commercialRoutes); 
+app.use('/api/auth', authRoutes); 
+
+// Route pour le retrait DAB (pour about.ejs)
+app.post('/api/dab/withdrawal', (req, res) => {
+    try {
+        const result = determineCoupureGeneric({
+            montant: parseFloat(req.body.montant),
+            typeDevise: req.body.typeDevise
+        });
+        
+        res.json({
+            success: true,
+            result: result
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: error.message
+        });
+    }
+});
 
 // Création du serveur HTTP avec Express
 const server = http.createServer(app);
@@ -92,7 +113,7 @@ function renderPage(res, template, title) {
         const templatePath = path.join(__dirname, template);
         const content = fs.readFileSync(templatePath, 'utf8');
         const rendered = ejs.render(content, {
-            isAdmin: false, // Vous pouvez gérer cela via les cookies si nécessaire
+            isAdmin: false, 
             title: `${title} - DAB Simulator`
         }, {
             filename: templatePath,
@@ -130,6 +151,26 @@ io.on("connection", (socket) => {
             io.emit("message", {
                 type: "system",
                 content: `${socket.username} a quitté le chat`
+            });
+        }
+    });
+
+    socket.on("withdrawal_request", async (data) => {
+        try {
+            const result = determineCoupureGeneric({
+                montant: parseFloat(data.amount),
+                typeDevise: data.currency
+            });
+
+            io.emit("withdrawal_result", {
+                type: "withdrawal",
+                user: data.username,
+                result: result
+            });
+        } catch (error) {
+            socket.emit("message", {
+                type: "system",
+                content: "Erreur lors du retrait: " + error.message
             });
         }
     });

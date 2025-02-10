@@ -246,7 +246,7 @@
                                             </span>
                                            <select class="form-select" id="taille_id" required>
                                                 <option value="">Sélectionner une taille</option>
-                                                <option value="XS">S</option>
+                                                <option value="XS">XS</option>
                                                 <option value="S">S</option>
                                                 <option value="M">M</option>
                                                 <option value="L">L</option>
@@ -928,22 +928,44 @@
             const response = await fetch(`/api/products/${id}`, {
               method: "DELETE",
               headers: {
-                "Content-Type": "application/json",
-              },
+                "Content-Type": "application/json"
+              }
             });
 
+            const data = await response.json();
+
             if (!response.ok) {
-              const errorData = await response.json();
-              throw new Error(
-                errorData.message || `Erreur HTTP: ${response.status}`
-              );
+              throw new Error(data.message || `Erreur HTTP: ${response.status}`);
             }
 
+            // Afficher le message de succès
+            const alertHtml = `
+              <div class="alert alert-success alert-dismissible fade show" role="alert">
+                ${data.message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+              </div>
+            `;
+            document.querySelector('.container').insertAdjacentHTML('afterbegin', alertHtml);
+
+            // Recharger la liste des produits
             await loadProducts();
-            alert("Produit supprimé avec succès");
+
+            // Supprimer l'alerte après 3 secondes
+            setTimeout(() => {
+              const alert = document.querySelector('.alert');
+              if (alert) {
+                alert.remove();
+              }
+            }, 3000);
           } catch (error) {
             console.error("Erreur:", error);
-            alert(`Erreur lors de la suppression du produit: ${error.message}`);
+            const alertHtml = `
+              <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                ${error.message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+              </div>
+            `;
+            document.querySelector('.container').insertAdjacentHTML('afterbegin', alertHtml);
           }
         }
       }

@@ -8,11 +8,9 @@ const updateProduct = async (id, productData) => {
       throw new Error('Produit non trouvé');
     }
 
-    await product.update(productData);
-    
-    return product;
+    return await product.update(productData);
   } catch (error) {
-    throw new Error(`Erreur lors de la mise à jour du produit: ${error.message}`);
+    throw new Error(`Erreur lors de la mise à jour du produit: ${error}`);
   }
 };
 

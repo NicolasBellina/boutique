@@ -197,35 +197,35 @@
             }
         });
 
-        // Simulation de retrait
+        // Gestion du formulaire DAB
         dabForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             
             const amount = parseFloat(document.getElementById('amount').value);
             const currency = document.getElementById('currency').value;
 
-            // Vérification des entrées
             if (isNaN(amount) || amount <= 0) {
-                appendMessage({
-                    type: 'system',
-                    content: 'Le montant doit être un nombre positif'
+                socket.emit("message", {
+                    type: "system",
+                    content: "Le montant doit être un nombre positif"
                 });
                 return;
             }
 
             try {
-                // Émettre directement la demande de retrait via WebSocket
+                // Émission de l'événement withdrawal_request
                 socket.emit("withdrawal_request", {
                     amount: amount,
-                    currency: currency
+                    currency: currency,
+                    username: username  // Ajout du nom d'utilisateur
                 });
 
-                // Réinitialiser le formulaire
+                // Réinitialisation du formulaire
                 dabForm.reset();
             } catch (error) {
-                appendMessage({
-                    type: 'system',
-                    content: `Erreur: ${error.message}`
+                socket.emit("message", {
+                    type: "system",
+                    content: "Erreur lors du retrait: " + error.message
                 });
                 console.error('Erreur:', error);
             }
