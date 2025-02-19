@@ -1,8 +1,8 @@
-import getAllEmployes from '../methodsEmploye/getAllEmploye.js'
-import getEmployeById from '../methodsEmploye/getEmployeById.js'
-import createEmploye from '../methodsEmploye/createEmploye.js'
-import updateEmploye from '../methodsEmploye/updateEmploye.js'
-import deleteEmploye from '../methodsEmploye/deleteEmploye.js'
+import getAllEmployes from '../methods/methodsEmploye/getAllEmploye.js'
+import getEmployeById from '../methods/methodsEmploye/getEmployeById.js'
+import createEmploye from '../methods/methodsEmploye/createEmploye.js'
+import updateEmploye from '../methods/methodsEmploye/updateEmploye.js'
+import deleteEmploye from '../methods/methodsEmploye/deleteEmploye.js'
 
 const EmployeController = {
     getAllEmployes: async (req, res) => {

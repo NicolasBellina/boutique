@@ -1,5 +1,5 @@
-import Commercial from '../models/commercialModel.js';
-import sequelize from '../../database.js';
+import Commercial from '../../models/commercialModel.js';
+import sequelize from '../../../database.js';
 
 const deleteCommercial = async (id) => {
     const transaction = await sequelize.transaction();

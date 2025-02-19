@@ -1,5 +1,5 @@
-import Employe from '../models/employeModel.js';
-import sequelize from '../../database.js';
+import Employe from '../../models/employeModel.js';
+import sequelize from '../../../database.js';
 
 const deleteEmploye = async (id) => {
     const transaction = await sequelize.transaction();

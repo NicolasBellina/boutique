@@ -1,4 +1,4 @@
-import Commercial from '../models/commercialModel.js';
+import Commercial from '../../models/commercialModel.js';
 
 const updateCommercial = async (id, commercialData) => {
     try {

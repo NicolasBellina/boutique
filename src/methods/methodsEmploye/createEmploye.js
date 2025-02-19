@@ -1,4 +1,4 @@
-import Employe from '../models/employeModel.js';
+import Employe from '../../models/employeModel.js';
 
 const createEmploye = async (employeData) => {
   try {

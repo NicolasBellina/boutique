@@ -1,8 +1,8 @@
-import createCommercial from '../methodsCommercial/createCommercial.js'
-import getCommercialById from '../methodsCommercial/getCommercialById.js'
-import deleteCommercial from '../methodsCommercial/deleteCommercial.js'
-import updateCommercial from '../methodsCommercial/updateCommercial.js'
-import getAllCommercials from '../methodsCommercial/getAllCommercials.js'
+import createCommercial from '../methods/methodsCommercial/createCommercial.js'
+import getCommercialById from '../methods/methodsCommercial/getCommercialById.js'
+import deleteCommercial from '../methods/methodsCommercial/deleteCommercial.js'
+import updateCommercial from '../methods/methodsCommercial/updateCommercial.js'
+import getAllCommercials from '../methods/methodsCommercial/getAllCommercials.js'
 
 const getAllCommercialsController = async (req, res) => {
     try {

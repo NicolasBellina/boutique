@@ -1,5 +1,5 @@
-import Product from '../models/productModel.js';
-import sequelize from '../../database.js';
+import Product from '../../models/productModel.js';
+import sequelize from '../../../database.js';
 
 const deleteProduct = async (id) => {
     const transaction = await sequelize.transaction();

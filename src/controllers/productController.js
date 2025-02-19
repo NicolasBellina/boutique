@@ -1,8 +1,8 @@
-import getAllProducts from '../methodsProduct/getAllProducts.js';
-import getProductById from '../methodsProduct/getProductById.js'
-import createProduct from '../methodsProduct/createProduct.js'
-import updateProduct from '../methodsProduct/updateProduct.js'
-import deleteProduct from '../methodsProduct/deleteProduct.js'
+import getAllProducts from '../methods/methodsProduct/getAllProducts.js';
+import getProductById from '../methods/methodsProduct/getProductById.js'
+import createProduct from '../methods/methodsProduct/createProduct.js'
+import updateProduct from '../methods/methodsProduct/updateProduct.js'
+import deleteProduct from '../methods/methodsProduct/deleteProduct.js'
 
 const ProductController = {
     getAllProducts: async (req, res) => {

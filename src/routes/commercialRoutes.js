@@ -1,6 +1,7 @@
 import express from 'express';
 import commercialController from '../controllers/commercialController.js';
 import authMiddleware from '../middleware/authmiddleware.js';
+
 const router = express.Router();
 
 router.get("/commercials", authMiddleware, commercialController.getAllCommercialsController);

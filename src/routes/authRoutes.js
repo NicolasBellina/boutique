@@ -6,7 +6,7 @@ dotenv.config();
 
 const router = express.Router();
 
-// Simulons des credentials valides pour le test
+// Simulons des credentials valides pour le 
 const VALID_CREDENTIALS = {
     email: "test@test.com",
     password: "test123"
