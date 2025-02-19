@@ -9,7 +9,7 @@ import swaggerUi from 'swagger-ui-express';
 import swaggerSpecs from './src/Documentation/swagger.js';
 import productRoutes from './src/routes/productRoutes.js';
 import authRoutes from './src/routes/authRoutes.js';
-import employesRoutes from './src/routes/employesRoutes.js';
+import employeRoutes from './src/routes/employesRoutes.js';
 import commercialRoutes from './src/routes/commercialRoutes.js';
 import determineCoupureGeneric from './src/DAB/dab.js';
 
@@ -38,7 +38,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Routes API
 app.use('/api', productRoutes);
-app.use('/api', employesRoutes);
+app.use('/api', employeRoutes);
 app.use('/api', commercialRoutes);
 app.use('/api', authRoutes);
 
@@ -52,7 +52,7 @@ app.post('/login', (req, res) => {
 });
 
 // Routes protégées
-app.use('/api/employes', employesRoutes); 
+app.use('/api/employes', employeRoutes); 
 app.use('/api/products', productRoutes); 
 app.use('/api/commercials', commercialRoutes); 
 app.use('/api/auth', authRoutes); 

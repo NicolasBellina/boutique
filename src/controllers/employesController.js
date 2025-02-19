@@ -1,15 +1,9 @@
-import getAllEmployes from '../methods/methodsEmploye/getAllEmploye.js'
-import getEmployeById from '../methods/methodsEmploye/getEmployeById.js'
-import createEmploye from '../methods/methodsEmploye/createEmploye.js'
-import updateEmploye from '../methods/methodsEmploye/updateEmploye.js'
-import deleteEmploye from '../methods/methodsEmploye/deleteEmploye.js'
+import employeService from '../services/employeService.js';
 
 const EmployeController = {
     getAllEmployes: async (req, res) => {
         try {
-            console.log('Route /api/employes appelée');
-            const employes = await getAllEmployes();
-            console.log('Employés récupérés:', employes);
+            const employes = await employeService.getAll();
             res.status(200).json(employes);
         } catch (error) {
             console.error('Erreur dans getAllEmployes:', error);
@@ -22,16 +16,10 @@ const EmployeController = {
 
     getEmployeById: async (req, res) => {
         try {
-            const id = req.params.id;
-            console.log('Tentative de récupération de l\'employé avec ID:', id);
-            const employe = await getEmployeById(id);
-            
+            const employe = await employeService.getById(req.params.id);
             if (!employe) {
-                console.log('Employé non trouvé pour l\'ID:', id);
                 return res.status(404).json({ message: 'Employé non trouvé' });
             }
-            
-            console.log('Employé récupéré:', employe);
             res.status(200).json(employe);
         } catch (error) {
             console.error('Erreur lors de la récupération de l\'employé:', error);
@@ -44,30 +32,22 @@ const EmployeController = {
 
     createEmploye: async (req, res) => {
         try {
-            console.log('Données reçues:', req.body);
-            const employe = await createEmploye(req.body);
-            console.log('Employé créé:', employe);
+            const employe = await employeService.create(req.body);
             res.status(201).json(employe);
         } catch (error) {
-            console.error('Erreur lors de la création du employé:', error);
+            console.error('Erreur lors de la création de l\'employé:', error);
             res.status(500).json({ 
-                message: 'Erreur lors de la création du employé',
+                message: 'Erreur lors de la création de l\'employé',
             });
         }
     }, 
 
     updateEmploye: async (req, res) => {
         try {
-            const id = req.params.id;
-            console.log('Tentative de mise à jour de l\'employé:', id, req.body);
-            
-            const employe = await updateEmploye(id, req.body);
-            
+            const employe = await employeService.update(req.params.id, req.body);
             if (!employe) {
                 return res.status(404).json({ message: 'Employé non trouvé' });
             }
-            
-            console.log('Employé mis à jour avec succès:', employe);
             res.status(200).json(employe);
         } catch (error) {
             console.error('Erreur lors de la mise à jour:', error);
@@ -80,11 +60,10 @@ const EmployeController = {
 
     deleteEmploye: async (req, res) => {
         try {
-            const id = req.params.id;
-            const employe = await deleteEmploye(id);
-            res.status(204).json(employe);
+            await employeService.delete(req.params.id);
+            res.status(204).send();
         } catch (error) {
-            res.status(500).json({ message: 'Erreur lors de la suppression du employé' });
+            res.status(500).json({ message: 'Erreur lors de la suppression de l\'employé' });
         }
     }
 }
