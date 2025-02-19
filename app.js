@@ -5,6 +5,8 @@ import { Server } from 'socket.io';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import express from 'express';
+import swaggerUi from 'swagger-ui-express';
+import swaggerSpecs from './src/Documentation/swagger.js';
 import productRoutes from './src/routes/productRoutes.js';
 import authRoutes from './src/routes/authRoutes.js';
 import employesRoutes from './src/routes/employesRoutes.js';
@@ -20,6 +22,9 @@ const app = express();
 
 // Middleware pour parser le JSON
 app.use(express.json());
+
+// Documentation Swagger
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpecs));
 
 // Middleware pour logger les requêtes
 app.use((req, res, next) => {
@@ -105,6 +110,10 @@ app.get('/commercials', (req, res) => {
 
 app.get('/contact', (req, res) => {
     renderPage(res, 'src/pages/contact.ejs', 'Contact');
+});
+
+app.get('/api-docs', (req, res) => {
+    res.sendFile(path.join(__dirname, 'src/Documentation/swagger.html'));
 });
 
 // Fonction pour rendre les pages
