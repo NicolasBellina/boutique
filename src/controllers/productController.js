@@ -60,7 +60,6 @@ const ProductController = {
         try {
             const { nom, prix, type_produit, quantite_stock, description, taille_id, couleur_id, marque_id } = req.body;
 
-            // Validation des champs obligatoires
             if (!nom || !prix || !type_produit || quantite_stock === undefined) {
                 return res.status(400).json({
                     success: false,
@@ -68,7 +67,6 @@ const ProductController = {
                 });
             }
 
-            // Nettoyage et validation des données
             const productData = {
                 nom: nom.trim(),
                 description: description ? description.trim() : null,
@@ -80,7 +78,6 @@ const ProductController = {
                 marque_id: marque_id || null
             };
 
-            // Validation des types de données
             if (isNaN(productData.prix) || productData.prix <= 0) {
                 return res.status(400).json({
                     success: false,
@@ -131,7 +128,6 @@ const ProductController = {
                 });
             }
 
-            // Vérification de l'existence du produit
             const existingProduct = await productService.getById(id);
             if (!existingProduct) {
                 return res.status(404).json({
@@ -142,7 +138,6 @@ const ProductController = {
 
             const { nom, prix, type_produit, quantite_stock, description, taille_id, couleur_id, marque_id } = req.body;
 
-            // Préparation des données à mettre à jour
             const updateData = {};
             
             if (nom !== undefined) updateData.nom = nom.trim();
@@ -154,7 +149,6 @@ const ProductController = {
             if (couleur_id !== undefined) updateData.couleur_id = couleur_id || null;
             if (marque_id !== undefined) updateData.marque_id = marque_id || null;
 
-            // Validation des données
             if (updateData.prix !== undefined && (isNaN(updateData.prix) || updateData.prix <= 0)) {
                 return res.status(400).json({
                     success: false,
@@ -206,7 +200,6 @@ const ProductController = {
 
             console.log('Tentative de suppression du produit avec ID:', id);
             
-            // Vérification de l'existence du produit
             const existingProduct = await productService.getById(id);
             if (!existingProduct) {
                 return res.status(404).json({

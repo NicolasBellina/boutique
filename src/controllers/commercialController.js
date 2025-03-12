@@ -69,7 +69,6 @@ const CommercialController = {
         try {
             const { nom, prenom, email, telephone, secteur } = req.body;
 
-            // Validation des champs obligatoires
             if (!nom || !prenom || !email) {
                 return res.status(400).json({
                     success: false,
@@ -77,7 +76,6 @@ const CommercialController = {
                 });
             }
 
-            // Validation de l'email
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             if (!emailRegex.test(email)) {
                 return res.status(400).json({
@@ -122,7 +120,6 @@ const CommercialController = {
                 });
             }
 
-            // Vérification de l'existence du commercial
             const existingCommercial = await commercialService.getById(id);
             if (!existingCommercial) {
                 return res.status(404).json({
@@ -133,7 +130,6 @@ const CommercialController = {
 
             const { nom, prenom, email, telephone, secteur } = req.body;
 
-            // Préparation des données à mettre à jour
             const updateData = {};
             
             if (nom !== undefined) updateData.nom = nom.trim();
@@ -180,7 +176,6 @@ const CommercialController = {
                 });
             }
 
-            // Vérification de l'existence du commercial
             const existingCommercial = await commercialService.getById(id);
             if (!existingCommercial) {
                 return res.status(404).json({

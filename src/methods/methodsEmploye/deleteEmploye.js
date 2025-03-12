@@ -10,15 +10,12 @@ const deleteEmploye = async (id) => {
             throw new Error('Employé non trouvé');
         }
 
-        // Supprimer l'employé
         await employe.destroy({ transaction });
 
-        // Valider la transaction
         await transaction.commit();
         return employe;
 
     } catch (error) {
-        // En cas d'erreur, annuler la transaction
         await transaction.rollback();
         throw new Error(`Erreur lors de la suppression de l'employé: ${error.message}`);
     }
