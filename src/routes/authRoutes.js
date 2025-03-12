@@ -6,10 +6,10 @@ dotenv.config();
 
 const router = express.Router();
 
-// Simulons des credentials valides pour le 
+// Identifiants de test
 const VALID_CREDENTIALS = {
     email: "test@test.com",
-    password: "test123"
+    password: "test"
 };
 
 // Clé secrète pour JWT (à mettre dans les variables d'environnement en production)

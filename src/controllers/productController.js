@@ -58,40 +58,52 @@ const ProductController = {
 
     createProduct: async (req, res) => {
         try {
-            const { nom, prix, type_produit, quantite_stock } = req.body;
+            const { nom, prix, type_produit, quantite_stock, description, taille_id, couleur_id, marque_id } = req.body;
 
             // Validation des champs obligatoires
-            if (!nom || !prix || !type_produit || !quantite_stock) {
+            if (!nom || !prix || !type_produit || quantite_stock === undefined) {
                 return res.status(400).json({
                     success: false,
                     message: 'Tous les champs obligatoires doivent être remplis (nom, prix, type_produit, quantite_stock)'
                 });
             }
 
+            // Nettoyage et validation des données
+            const productData = {
+                nom: nom.trim(),
+                description: description ? description.trim() : null,
+                prix: Number(prix),
+                type_produit: Number(type_produit),
+                quantite_stock: Number(quantite_stock),
+                taille_id: taille_id || null,
+                couleur_id: couleur_id || null,
+                marque_id: marque_id || null
+            };
+
             // Validation des types de données
-            if (typeof prix !== 'number' || prix <= 0) {
+            if (isNaN(productData.prix) || productData.prix <= 0) {
                 return res.status(400).json({
                     success: false,
                     message: 'Le prix doit être un nombre positif'
                 });
             }
 
-            if (!Number.isInteger(type_produit)) {
+            if (!Number.isInteger(productData.type_produit) || productData.type_produit <= 0) {
                 return res.status(400).json({
                     success: false,
-                    message: 'Le type_produit doit être un nombre entier'
+                    message: 'Le type_produit doit être un nombre entier positif'
                 });
             }
 
-            if (typeof quantite_stock !== 'number' || quantite_stock < 0) {
+            if (!Number.isInteger(productData.quantite_stock) || productData.quantite_stock < 0) {
                 return res.status(400).json({
                     success: false,
-                    message: 'La quantité en stock doit être un nombre positif ou nul'
+                    message: 'La quantité en stock doit être un nombre entier positif ou nul'
                 });
             }
 
-            console.log('Données reçues:', req.body);
-            const product = await productService.create(req.body);
+            console.log('Données reçues:', productData);
+            const product = await productService.create(productData);
             console.log('Produit créé:', product);
             
             res.status(201).json({
@@ -128,30 +140,45 @@ const ProductController = {
                 });
             }
 
-            // Validation des données de mise à jour
-            const { prix, quantite_stock, type_produit } = req.body;
-            if (prix && (typeof prix !== 'number' || prix <= 0)) {
+            const { nom, prix, type_produit, quantite_stock, description, taille_id, couleur_id, marque_id } = req.body;
+
+            // Préparation des données à mettre à jour
+            const updateData = {};
+            
+            if (nom !== undefined) updateData.nom = nom.trim();
+            if (description !== undefined) updateData.description = description.trim();
+            if (prix !== undefined) updateData.prix = Number(prix);
+            if (type_produit !== undefined) updateData.type_produit = Number(type_produit);
+            if (quantite_stock !== undefined) updateData.quantite_stock = Number(quantite_stock);
+            if (taille_id !== undefined) updateData.taille_id = taille_id || null;
+            if (couleur_id !== undefined) updateData.couleur_id = couleur_id || null;
+            if (marque_id !== undefined) updateData.marque_id = marque_id || null;
+
+            // Validation des données
+            if (updateData.prix !== undefined && (isNaN(updateData.prix) || updateData.prix <= 0)) {
                 return res.status(400).json({
                     success: false,
                     message: 'Le prix doit être un nombre positif'
                 });
             }
 
-            if (quantite_stock && (typeof quantite_stock !== 'number' || quantite_stock < 0)) {
-                return res.status(400).json({
-                    success: false,
-                    message: 'La quantité en stock doit être un nombre positif ou nul'
-                });
-            }
-
-            if (type_produit && (!Number.isInteger(type_produit) || type_produit <= 0)) {
+            if (updateData.type_produit !== undefined && (!Number.isInteger(updateData.type_produit) || updateData.type_produit <= 0)) {
                 return res.status(400).json({
                     success: false,
                     message: 'Le type de produit doit être un nombre entier positif'
                 });
             }
 
-            const updatedProduct = await productService.update(id, req.body);
+            if (updateData.quantite_stock !== undefined && (!Number.isInteger(updateData.quantite_stock) || updateData.quantite_stock < 0)) {
+                return res.status(400).json({
+                    success: false,
+                    message: 'La quantité en stock doit être un nombre entier positif ou nul'
+                });
+            }
+
+            console.log('Données de mise à jour:', updateData);
+            const updatedProduct = await productService.update(id, updateData);
+            
             res.status(200).json({
                 success: true,
                 message: 'Produit mis à jour avec succès',
