@@ -5,10 +5,16 @@ import Employees from '../pages/employes.vue'; // Importez le composant pour la 
 import Commercials from '../pages/commercial.vue'; // Importez le composant pour la page des commerciaux
 import Contact from '../pages/contact.vue'; // Importez le composant pour la page de contact
 import NotFound from '../pages/404.vue'; // Importez le composant pour la page 404
+import FormPage from '../views/FormPage.vue';
 
 const routes = [
   {
     path: '/',
+    name: 'Formulaire',
+    component: FormPage,
+  },
+  {
+    path: '/home',
     name: 'Home',
     component: Home,
   },
