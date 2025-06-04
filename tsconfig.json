@@ -1,0 +1,19 @@
+{
+    "compilerOptions": {
+      "target": "esnext",
+      "module": "esnext",
+      "moduleResolution": "node",
+      "strict": true,
+      "jsx": "preserve",
+      "esModuleInterop": true,
+      "skipLibCheck": true,
+      "types": ["vue"]
+    },
+    "include": [
+      "src/**/*" // Inclut tous les fichiers dans le dossier src
+, "src/App.vue", "src/main.js"    ],
+    "exclude": [
+      "node_modules", // Exclut le dossier node_modules
+      "**/*.spec.ts" // Exclut les fichiers de test si nécessaire
+    ]
+  }

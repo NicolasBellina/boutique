@@ -44,7 +44,7 @@ const router = express.Router();
  *               items:
  *                 $ref: '#/components/schemas/Product'
  */
-router.get('/products', ProductController.getAllProducts);
+router.get('/', ProductController.getAllProducts);
 
 /**
  * @swagger
@@ -69,7 +69,7 @@ router.get('/products', ProductController.getAllProducts);
  *       404:
  *         description: Produit non trouvé
  */
-router.get('/products/:id', ProductController.getProductById);
+router.get('/:id', ProductController.getProductById);
 
 /**
  * @swagger
@@ -118,7 +118,7 @@ router.get('/products/:id', ProductController.getProductById);
  *                 message:
  *                   type: string
  */
-router.post('/products', ProductController.createProduct);
+router.post('/', ProductController.createProduct);
 
 /**
  * @swagger
@@ -145,7 +145,7 @@ router.post('/products', ProductController.createProduct);
  *       404:
  *         description: Produit non trouvé
  */
-router.put('/products/:id', ProductController.updateProduct);
+router.put('/:id', ProductController.updateProduct);
 
 /**
  * @swagger
@@ -166,6 +166,6 @@ router.put('/products/:id', ProductController.updateProduct);
  *       404:
  *         description: Produit non trouvé
  */
-router.delete('/products/:id', ProductController.deleteProduct);
+router.delete('/:id', ProductController.deleteProduct);
 
 export default router;

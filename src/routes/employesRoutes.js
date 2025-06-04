@@ -44,7 +44,7 @@ const router = express.Router();
  *               items:
  *                 $ref: '#/components/schemas/Employe'
  */
-router.get('/employes', EmployeController.getAllEmployes);
+router.get('/', EmployeController.getAllEmployes);
 
 /**
  * @swagger
@@ -69,7 +69,7 @@ router.get('/employes', EmployeController.getAllEmployes);
  *       404:
  *         description: Employé non trouvé
  */
-router.get('/employes/:id', EmployeController.getEmployeById);
+router.get('/:id', EmployeController.getEmployeById);
 
 /**
  * @swagger
@@ -119,7 +119,7 @@ router.get('/employes/:id', EmployeController.getEmployeById);
  *       400:
  *         description: Données invalides
  */
-router.post('/employes', EmployeController.createEmploye);
+router.post('/', EmployeController.createEmploye);
 
 /**
  * @swagger
@@ -146,7 +146,7 @@ router.post('/employes', EmployeController.createEmploye);
  *       404:
  *         description: Employé non trouvé
  */
-router.put('/employes/:id', EmployeController.updateEmploye);
+router.put('/:id', EmployeController.updateEmploye);
 
 /**
  * @swagger
@@ -167,6 +167,6 @@ router.put('/employes/:id', EmployeController.updateEmploye);
  *       404:
  *         description: Employé non trouvé
  */
-router.delete('/employes/:id', EmployeController.deleteEmploye);
+router.delete('/:id', EmployeController.deleteEmploye);
 
 export default router;

@@ -47,7 +47,7 @@ const router = express.Router();
  *               items:
  *                 $ref: '#/components/schemas/Commercial'
  */
-router.get("/commercials", authMiddleware, commercialController.getAllCommercials);
+router.get("/", authMiddleware, commercialController.getAllCommercials);
 
 /**
  * @swagger
@@ -72,7 +72,7 @@ router.get("/commercials", authMiddleware, commercialController.getAllCommercial
  *             schema:
  *               $ref: '#/components/schemas/Commercial'
  */
-router.get("/commercials/:id", authMiddleware, commercialController.getCommercialById);
+router.get("/:id", authMiddleware, commercialController.getCommercialById);
 
 /**
  * @swagger
@@ -92,7 +92,7 @@ router.get("/commercials/:id", authMiddleware, commercialController.getCommercia
  *       201:
  *         description: Commercial créé avec succès
  */
-router.post("/commercials", authMiddleware, commercialController.createCommercial);
+router.post("/", authMiddleware, commercialController.createCommercial);
 
 /**
  * @swagger
@@ -119,7 +119,7 @@ router.post("/commercials", authMiddleware, commercialController.createCommercia
  *       200:
  *         description: Commercial mis à jour avec succès
  */
-router.put("/commercials/:id", authMiddleware, commercialController.updateCommercial);
+router.put("/:id", authMiddleware, commercialController.updateCommercial);
 
 /**
  * @swagger
@@ -140,6 +140,6 @@ router.put("/commercials/:id", authMiddleware, commercialController.updateCommer
  *       204:
  *         description: Commercial supprimé avec succès
  */
-router.delete("/commercials/:id", authMiddleware, commercialController.deleteCommercial);
+router.delete("/:id", authMiddleware, commercialController.deleteCommercial);
 
 export default router;

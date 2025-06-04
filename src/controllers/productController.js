@@ -4,19 +4,17 @@ import productService from '../services/productService.js';
 const ProductController = {
     getAllProducts: async (req, res) => {
         try {
-            console.log('Tentative de récupération des produits...');
             const products = await productService.getAll();
-            console.log('Produits récupérés:', products);
             res.status(200).json({
                 success: true,
                 data: products
             });
         } catch (error) {
             console.error('Erreur lors de la récupération des produits:', error);
-            res.status(500).json({ 
+            res.status(500).json({
                 success: false,
                 message: 'Erreur lors de la récupération des produits',
-                error: error.message 
+                error: error.message
             });
         }
     },

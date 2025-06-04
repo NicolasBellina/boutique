@@ -3,11 +3,25 @@ import employeService from '../services/employeService.js';
 const EmployeController = {
     getAllEmployes: async (req, res) => {
         try {
+            console.log('Début de getAllEmployes');
             const employes = await employeService.getAll();
-            res.status(200).json(employes);
+            console.log(`Nombre d'employés récupérés: ${employes.length}`);
+            
+            // Formatage des dates pour l'affichage
+            const formattedEmployes = employes.map(emp => ({
+                ...emp,
+                date_naissance: emp.date_naissance ? new Date(emp.date_naissance).toISOString().split('T')[0] : null
+            }));
+
+            res.status(200).json({
+                success: true,
+                data: formattedEmployes,
+                count: formattedEmployes.length
+            });
         } catch (error) {
             console.error('Erreur dans getAllEmployes:', error);
             res.status(500).json({ 
+                success: false,
                 message: 'Erreur lors de la récupération des employés',
                 error: error.message 
             });
