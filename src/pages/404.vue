@@ -1,6 +1,6 @@
 <template>
     <div :class="['d-flex', 'flex-column', 'h-100', isAdmin ? 'bg-dark text-white' : '']">
-      <Header /> <!-- Inclure le composant Header -->
+      <HeaderComponent />
       <main class="flex-shrink-0">
         <div class="container mt-4">
           <h1>404 - Page non trouvée</h1>
@@ -8,18 +8,19 @@
           <router-link to="/" class="btn btn-primary">Retour à l'accueil</router-link>
         </div>
       </main>
-      <Footer /> <!-- Inclure le composant Footer -->
+      <FooterComponent />
     </div>
   </template>
   
   <script>
-  import Header from '../components/Header.vue';
-  import Footer from '../components/Footer.vue';
+  import HeaderComponent from '@/components/header.vue';
+  import FooterComponent from '@/components/footer.vue';
   
   export default {
+    name: 'NotFound',
     components: {
-      Header,
-      Footer
+      HeaderComponent,
+      FooterComponent
     },
     computed: {
       isAdmin() {
