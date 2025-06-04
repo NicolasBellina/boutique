@@ -50,49 +50,114 @@
 
     <!-- Modal pour ajouter/modifier un employé -->
     <div class="modal fade" id="employeModal" tabindex="-1" ref="employeModal">
-      <div class="modal-dialog">
+      <div class="modal-dialog modal-lg">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title">{{ modalMode === 'add' ? 'Ajouter un employé' : 'Modifier l\'employé' }}</h5>
+            <div class="modal-title-container">
+              <i class="fas fa-user-edit modal-icon"></i>
+              <h5 class="modal-title">{{ modalMode === 'add' ? 'Ajouter un employé' : 'Modifier l\'employé' }}</h5>
+            </div>
             <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
           </div>
           <div class="modal-body">
-            <form @submit.prevent="submitEmploye">
-              <div class="mb-3">
-                <label class="form-label">Nom</label>
-                <input type="text" class="form-control" v-model="currentEmploye.nom" required>
+            <form @submit.prevent="submitEmploye" class="employee-form">
+              <div class="form-sections">
+                <!-- Informations personnelles -->
+                <div class="form-section">
+                  <div class="section-header">
+                    <i class="fas fa-user-circle"></i>
+                    <h6>Informations personnelles</h6>
+                  </div>
+                  <div class="form-row">
+                    <div class="form-group">
+                      <label class="form-label">
+                        <i class="fas fa-user"></i>
+                        Nom
+                      </label>
+                      <input type="text" class="form-control" v-model="currentEmploye.nom" required>
+                    </div>
+                    <div class="form-group">
+                      <label class="form-label">
+                        <i class="fas fa-user"></i>
+                        Prénom
+                      </label>
+                      <input type="text" class="form-control" v-model="currentEmploye.prenom" required>
+                    </div>
+                  </div>
+                  <div class="form-row">
+                    <div class="form-group">
+                      <label class="form-label">
+                        <i class="fas fa-calendar"></i>
+                        Date de naissance
+                      </label>
+                      <input type="date" class="form-control" v-model="currentEmploye.date_naissance">
+                    </div>
+                    <div class="form-group">
+                      <label class="form-label">
+                        <i class="fas fa-phone"></i>
+                        Téléphone
+                      </label>
+                      <input type="tel" class="form-control" v-model="currentEmploye.telephone">
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Informations professionnelles -->
+                <div class="form-section">
+                  <div class="section-header">
+                    <i class="fas fa-briefcase"></i>
+                    <h6>Informations professionnelles</h6>
+                  </div>
+                  <div class="form-row">
+                    <div class="form-group">
+                      <label class="form-label">
+                        <i class="fas fa-envelope"></i>
+                        Email
+                      </label>
+                      <input type="email" class="form-control" v-model="currentEmploye.email" required>
+                    </div>
+                    <div class="form-group">
+                      <label class="form-label">
+                        <i class="fas fa-user-tag"></i>
+                        Rôle
+                      </label>
+                      <input type="text" class="form-control" v-model="currentEmploye.role">
+                    </div>
+                  </div>
+                  <div class="form-row">
+                    <div class="form-group">
+                      <label class="form-label">
+                        <i class="fas fa-euro-sign"></i>
+                        Salaire
+                      </label>
+                      <input type="number" class="form-control" v-model="currentEmploye.salaire" step="0.01" required>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Adresse -->
+                <div class="form-section">
+                  <div class="section-header">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <h6>Adresse</h6>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">
+                      <i class="fas fa-home"></i>
+                      Adresse complète
+                    </label>
+                    <input type="text" class="form-control" v-model="currentEmploye.adresse">
+                  </div>
+                </div>
               </div>
-              <div class="mb-3">
-                <label class="form-label">Prénom</label>
-                <input type="text" class="form-control" v-model="currentEmploye.prenom" required>
-              </div>
-              <div class="mb-3">
-                <label class="form-label">Email</label>
-                <input type="email" class="form-control" v-model="currentEmploye.email" required>
-              </div>
-              <div class="mb-3">
-                <label class="form-label">Rôle</label>
-                <input type="text" class="form-control" v-model="currentEmploye.role">
-              </div>
-              <div class="mb-3">
-                <label class="form-label">Salaire</label>
-                <input type="number" class="form-control" v-model="currentEmploye.salaire" step="0.01" required>
-              </div>
-              <div class="mb-3">
-                <label class="form-label">Téléphone</label>
-                <input type="tel" class="form-control" v-model="currentEmploye.telephone">
-              </div>
-              <div class="mb-3">
-                <label class="form-label">Adresse</label>
-                <input type="text" class="form-control" v-model="currentEmploye.adresse">
-              </div>
-              <div class="mb-3">
-                <label class="form-label">Date de naissance</label>
-                <input type="date" class="form-control" v-model="currentEmploye.date_naissance">
-              </div>
+
               <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                  <i class="fas fa-times"></i>
+                  Annuler
+                </button>
                 <button type="submit" class="btn btn-primary">
+                  <i :class="modalMode === 'add' ? 'fas fa-plus' : 'fas fa-save'"></i>
                   {{ modalMode === 'add' ? 'Ajouter' : 'Modifier' }}
                 </button>
               </div>
@@ -309,5 +374,179 @@ main {
 
 .badge {
   margin-right: 0.5em;
+}
+
+.modal-content {
+  border: none;
+  border-radius: 15px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.modal-header {
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #e9ecef;
+  padding: 1.5rem;
+  border-radius: 15px 15px 0 0;
+}
+
+.modal-title-container {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.modal-icon {
+  font-size: 1.5rem;
+  color: #4a90e2;
+}
+
+.modal-title {
+  margin: 0;
+  color: #2c3e50;
+  font-weight: 600;
+}
+
+.modal-body {
+  padding: 2rem;
+}
+
+.form-sections {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.form-section {
+  background-color: #f8f9fa;
+  border-radius: 10px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid #e9ecef;
+}
+
+.section-header i {
+  color: #4a90e2;
+  font-size: 1.2rem;
+}
+
+.section-header h6 {
+  margin: 0;
+  color: #2c3e50;
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.form-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #2c3e50;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+
+.form-label i {
+  color: #4a90e2;
+}
+
+.form-control {
+  padding: 0.75rem;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.form-control:focus {
+  border-color: #4a90e2;
+  box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.1);
+  outline: none;
+}
+
+.modal-footer {
+  border-top: 1px solid #e9ecef;
+  padding: 1.5rem;
+  margin-top: 2rem;
+}
+
+.btn {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.4rem 0.8rem;
+  font-weight: 500;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+  font-size: 0.9rem;
+}
+
+.btn i {
+  font-size: 0.8rem;
+}
+
+.btn-success {
+  padding: 0.4rem 0.8rem;
+  font-size: 0.9rem;
+}
+
+.btn-outline-primary, .btn-warning, .btn-danger {
+  padding: 0.3rem 0.6rem;
+  font-size: 0.85rem;
+}
+
+.btn-outline-primary i, .btn-warning i, .btn-danger i {
+  font-size: 0.8rem;
+}
+
+.btn-primary {
+  background-color: #4a90e2;
+  border: none;
+}
+
+.btn-primary:hover {
+  background-color: #357abd;
+  transform: translateY(-2px);
+}
+
+.btn-secondary {
+  background-color: #e74c3c;
+  border: none;
+}
+
+.btn-secondary:hover {
+  background-color: #c0392b;
+  transform: translateY(-2px);
+}
+
+@media (max-width: 768px) {
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+  
+  .modal-body {
+    padding: 1rem;
+  }
+  
+  .form-section {
+    padding: 1rem;
+  }
 }
 </style>

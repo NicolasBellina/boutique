@@ -5,7 +5,11 @@
       <!-- Contenu principal -->
       <main class="flex-shrink-0">
         <div class="container mt-4">
-          <h1>Bienvenue sur la page d'accueil</h1>
+          <div class="row justify-content-center mt-4">
+            <div class="col-md-4">
+              <EmployeeCard />
+            </div>
+          </div>
         </div>
       </main>
   
@@ -16,12 +20,14 @@
   <script>
   import HeaderComponent from '../components/header.vue';
   import FooterComponent from '../components/footer.vue';
+  import EmployeeCard from '../components/EmployeeCard.vue';
   
   export default {
     name: 'Home',
     components: {
       HeaderComponent,
       FooterComponent,
+      EmployeeCard
     },
     data() {
       return {

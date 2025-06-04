@@ -1,70 +1,133 @@
 <template>
   <div class="employees-container">
-    <h1>Gestion des Employés</h1>
+    <div class="page-header">
+      <h1>Gestion des Employés</h1>
+      <p class="subtitle">Gérez votre équipe efficacement</p>
+    </div>
     
     <!-- Formulaire d'ajout/modification -->
     <div class="form-container">
-      <h2>{{ isEditing ? 'Modifier l\'employé' : 'Ajouter un employé' }}</h2>
-      <form @submit.prevent="handleSubmit">
-        <div class="form-group">
-          <label for="firstName">Prénom</label>
-          <input type="text" id="firstName" v-model="employeeForm.firstName" required>
+      <div class="form-header">
+        <h2>{{ isEditing ? 'Modifier l\'employé' : 'Ajouter un employé' }}</h2>
+        <div class="form-icon">
+          <i class="fas fa-user-plus"></i>
+        </div>
+      </div>
+      <form @submit.prevent="handleSubmit" class="employee-form">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="firstName">
+              <i class="fas fa-user"></i>
+              Prénom
+            </label>
+            <input 
+              type="text" 
+              id="firstName" 
+              v-model="employeeForm.firstName" 
+              required
+              placeholder="Entrez le prénom"
+            >
+          </div>
+          
+          <div class="form-group">
+            <label for="lastName">
+              <i class="fas fa-user"></i>
+              Nom
+            </label>
+            <input 
+              type="text" 
+              id="lastName" 
+              v-model="employeeForm.lastName" 
+              required
+              placeholder="Entrez le nom"
+            >
+          </div>
         </div>
         
-        <div class="form-group">
-          <label for="lastName">Nom</label>
-          <input type="text" id="lastName" v-model="employeeForm.lastName" required>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="email">
+              <i class="fas fa-envelope"></i>
+              Email
+            </label>
+            <input 
+              type="email" 
+              id="email" 
+              v-model="employeeForm.email" 
+              required
+              placeholder="exemple@email.com"
+            >
+          </div>
+          
+          <div class="form-group">
+            <label for="position">
+              <i class="fas fa-briefcase"></i>
+              Poste
+            </label>
+            <input 
+              type="text" 
+              id="position" 
+              v-model="employeeForm.position" 
+              required
+              placeholder="Entrez le poste"
+            >
+          </div>
         </div>
         
-        <div class="form-group">
-          <label for="email">Email</label>
-          <input type="email" id="email" v-model="employeeForm.email" required>
+        <div class="form-actions">
+          <button type="submit" class="btn-primary">
+            <i :class="isEditing ? 'fas fa-save' : 'fas fa-plus'"></i>
+            {{ isEditing ? 'Modifier' : 'Ajouter' }}
+          </button>
+          <button type="button" @click="resetForm" class="btn-secondary">
+            <i class="fas fa-times"></i>
+            Annuler
+          </button>
         </div>
-        
-        <div class="form-group">
-          <label for="position">Poste</label>
-          <input type="text" id="position" v-model="employeeForm.position" required>
-        </div>
-        
-        <button type="submit" class="btn-primary">
-          {{ isEditing ? 'Modifier' : 'Ajouter' }}
-        </button>
-        <button type="button" @click="resetForm" class="btn-secondary">
-          Annuler
-        </button>
       </form>
     </div>
 
     <!-- Liste des employés -->
     <div class="employees-list">
-      <h2>Liste des employés</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>Prénom</th>
-            <th>Nom</th>
-            <th>Email</th>
-            <th>Poste</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="employee in employees" :key="employee.id">
-            <td>{{ employee.firstName }}</td>
-            <td>{{ employee.lastName }}</td>
-            <td>{{ employee.email }}</td>
-            <td>{{ employee.position }}</td>
-            <td>
-              <button @click="editEmployee(employee)" class="btn-edit">
-                Modifier
-              </button>
-              <button @click="deleteEmployee(employee.id)" class="btn-delete">
-                Supprimer
-              </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+      <div class="list-header">
+        <h2>Liste des employés</h2>
+        <div class="list-stats">
+          <span class="stat-item">
+            <i class="fas fa-users"></i>
+            {{ employees.length }} employés
+          </span>
+        </div>
+      </div>
+      
+      <div class="table-responsive">
+        <table>
+          <thead>
+            <tr>
+              <th>Prénom</th>
+              <th>Nom</th>
+              <th>Email</th>
+              <th>Poste</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="employee in employees" :key="employee.id" class="employee-row">
+              <td>{{ employee.firstName }}</td>
+              <td>{{ employee.lastName }}</td>
+              <td>{{ employee.email }}</td>
+              <td>{{ employee.position }}</td>
+              <td class="actions-cell">
+                <button @click="editEmployee(employee)" class="btn-edit" title="Modifier">
+                  <i class="fas fa-edit"></i>
+                </button>
+                <button @click="deleteEmployee(employee.id)" class="btn-delete" title="Supprimer">
+                  <i class="fas fa-trash-alt"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 </template>
@@ -142,80 +205,224 @@ export default {
 
 <style scoped>
 .employees-container {
-  padding: 20px;
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.page-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.page-header h1 {
+  color: #2c3e50;
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.subtitle {
+  color: #7f8c8d;
+  font-size: 1.1rem;
 }
 
 .form-container {
-  margin-bottom: 30px;
-  padding: 20px;
-  background-color: #f5f5f5;
-  border-radius: 8px;
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 2rem;
+  margin-bottom: 2rem;
+  transition: transform 0.3s ease;
+}
+
+.form-container:hover {
+  transform: translateY(-5px);
+}
+
+.form-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.form-icon {
+  font-size: 2rem;
+  color: #4a90e2;
+}
+
+.employee-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
 }
 
 .form-group {
-  margin-bottom: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
 .form-group label {
-  display: block;
-  margin-bottom: 5px;
+  color: #2c3e50;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .form-group input {
-  width: 100%;
-  padding: 8px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
+  padding: 0.75rem;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.form-group input:focus {
+  border-color: #4a90e2;
+  box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.1);
+  outline: none;
+}
+
+.form-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.btn-primary, .btn-secondary {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.3s ease;
 }
 
 .btn-primary {
-  background-color: #4CAF50;
+  background-color: #4a90e2;
   color: white;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  margin-right: 10px;
+}
+
+.btn-primary:hover {
+  background-color: #357abd;
+  transform: translateY(-2px);
 }
 
 .btn-secondary {
-  background-color: #f44336;
+  background-color: #e74c3c;
   color: white;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
 }
 
-.employees-list table {
+.btn-secondary:hover {
+  background-color: #c0392b;
+  transform: translateY(-2px);
+}
+
+.employees-list {
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 2rem;
+}
+
+.list-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.list-stats {
+  display: flex;
+  gap: 1rem;
+}
+
+.stat-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #7f8c8d;
+}
+
+.table-responsive {
+  overflow-x: auto;
+}
+
+table {
   width: 100%;
-  border-collapse: collapse;
-  margin-top: 20px;
+  border-collapse: separate;
+  border-spacing: 0;
 }
 
-.employees-list th,
-.employees-list td {
-  padding: 12px;
+th {
+  background-color: #f8f9fa;
+  color: #2c3e50;
+  font-weight: 600;
+  padding: 1rem;
   text-align: left;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 2px solid #e0e0e0;
+}
+
+td {
+  padding: 1rem;
+  border-bottom: 1px solid #e0e0e0;
+  color: #2c3e50;
+}
+
+.employee-row:hover {
+  background-color: #f8f9fa;
+}
+
+.actions-cell {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.btn-edit, .btn-delete {
+  padding: 0.5rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
 }
 
 .btn-edit {
-  background-color: #2196F3;
+  background-color: #4a90e2;
   color: white;
-  padding: 6px 12px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  margin-right: 5px;
 }
 
 .btn-delete {
-  background-color: #f44336;
+  background-color: #e74c3c;
   color: white;
-  padding: 6px 12px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
+}
+
+.btn-edit:hover, .btn-delete:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+@media (max-width: 768px) {
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+  
+  .employees-container {
+    padding: 1rem;
+  }
+  
+  .form-container, .employees-list {
+    padding: 1rem;
+  }
 }
 </style> 
