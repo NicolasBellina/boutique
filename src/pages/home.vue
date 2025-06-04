@@ -14,7 +14,7 @@
   </template>
   
   <script>
-  import HeaderComponent from '../components/header.vue';
+  import HeaderComponent from '../components/Header.vue';
   import FooterComponent from '../components/footer.vue';
   
   export default {
