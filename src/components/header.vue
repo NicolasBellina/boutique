@@ -11,16 +11,7 @@
             <a class="nav-link" href="/">Accueil</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/products">Produits</a>
-          </li>
-          <li class="nav-item">
             <a class="nav-link" href="/employes">Employés</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/commercials">Commerciaux</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/contact">Contact</a>
           </li>
         </ul>
       </div>
