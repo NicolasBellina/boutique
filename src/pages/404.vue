@@ -13,8 +13,8 @@
   </template>
   
   <script>
-  import HeaderComponent from '@/components/header.vue';
-  import FooterComponent from '@/components/footer.vue';
+  import HeaderComponent from '../components/header.vue';
+  import FooterComponent from '../components/footer.vue';
   
   export default {
     name: 'NotFound',
