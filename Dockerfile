@@ -22,7 +22,8 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm ci --only=production
 
-# Copie des fichiers buildés depuis le stage précédent
+# Copie des fichiers source et buildés
+COPY --from=builder /app/src ./src
 COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/app.js ./app.js
