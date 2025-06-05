@@ -1,7 +1,7 @@
 import express from 'express';
-import cors from 'cors';
-import employeRoutes from './src/routes/employesRoutes.js';
-import authRoutes from './src/routes/authRoutes.js';
+import cors from 'cors';    
+import employeRoutes from './src/api/routes/employesRoutes.js';
+import authRoutes from './src/api/authRoutes.js';
 
 const app = express();
 
@@ -30,7 +30,7 @@ app.use((err, req, res, next) => {
 });
 
 // Démarrage du serveur
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
     console.log(`Serveur en cours d'exécution sur le port ${PORT}`);
 });

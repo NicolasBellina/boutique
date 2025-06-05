@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import { authService } from '../services/authService'
+import { authService } from '../api/services/authService'
 
 export default {
   name: 'HeaderComponent',
