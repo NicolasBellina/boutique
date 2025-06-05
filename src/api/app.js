@@ -1,26 +1,19 @@
 import express from 'express';
-import cors from 'cors';
+import cors from 'cors';    
 import employeRoutes from './routes/employesRoutes.js';
 import authRoutes from './authRoutes.js';
 
 const app = express();
 
-// Configuration CORS
-app.use(cors({
-    origin: ['http://localhost:5175', 'http://localhost:5173'],
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    allowedHeaders: ['Content-Type', 'Authorization']
-}));
-
+// Middleware
+app.use(cors());
 app.use(express.json());
 
 // Middleware pour logger les requêtes
-app.use((req, res, next) => {
+app.use((req, res, next) => {   
     console.log(`${new Date().toISOString()} - ${req.method} ${req.url}`);
-    console.log('Body:', req.body);
     next();
 });
-
 
 // Routes API
 app.use('/api/employes', employeRoutes);
@@ -28,7 +21,7 @@ app.use('/api/auth', authRoutes);
 
 // Gestion des erreurs
 app.use((err, req, res, next) => {
-    console.error('Erreur:', err);
+    console.error(err.stack);
     res.status(500).json({
         success: false,
         message: 'Erreur interne du serveur',
