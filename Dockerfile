@@ -29,9 +29,16 @@ COPY --from=builder /app/public ./public
 COPY --from=builder /app/app.js ./app.js
 COPY --from=builder /app/database.js ./database.js
 COPY --from=builder /app/router.js ./router.js
+COPY --from=builder /app/.env ./.env
 
 # Variables d'environnement
 ENV NODE_ENV=production
+ENV DB_NAME=master
+ENV DB_USER=SA
+ENV DB_PASSWORD=BenjaminleGoat1!
+ENV DB_SERVER=localhost
+ENV DB_PORT=1433
+ENV JWT_SECRET=test
 
 # Exposition du port
 EXPOSE 3000
