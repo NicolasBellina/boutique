@@ -16,7 +16,7 @@ const config = new sql.Sequelize(
     process.env.DB_USER,
     process.env.DB_PASSWORD,
     {
-        host: process.env.DB_SERVER,
+        server: process.env.DB_SERVER,
         dialect: 'mssql',
         dialectOptions: {
             options: {
