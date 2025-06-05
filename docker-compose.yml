@@ -16,7 +16,8 @@ services:
       - DB_PORT=1433
       - JWT_SECRET=test
     depends_on:
-      - mssql
+      mssql:
+        condition: service_healthy
     env_file:
       - .env
     restart: unless-stopped
@@ -24,14 +25,34 @@ services:
       - app-network
 
   mssql:
-    image: mcr.microsoft.com/mssql/server:2019-latest
+    image: mcr.microsoft.com/azure-sql-edge
+    platform: linux/arm64
     environment:
       - ACCEPT_EULA=Y
-      - SA_PASSWORD=BenjaminleGoat1!
+      - MSSQL_SA_PASSWORD=BenjaminleGoat1!
+      - MSSQL_PID=Developer
+      - MSSQL_TCP_PORT=1433
     ports:
       - "1433:1433"
+    command: /opt/mssql/bin/sqlservr
+    healthcheck:
+      test: /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P "BenjaminleGoat1!" -Q "SELECT 1" || exit 1
+      interval: 10s
+      timeout: 3s
+      retries: 10
+      start_period: 20s
     networks:
       - app-network
+    user: mssql
+    cap_add:
+      - SYS_PTRACE
+    security_opt:
+      - seccomp:unconfined
+    volumes:
+      - mssql-data:/var/opt/mssql
+
+volumes:
+  mssql-data:
 
 networks:
   app-network:

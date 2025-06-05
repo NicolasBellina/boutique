@@ -18,6 +18,9 @@ FROM node:18.19.1-alpine3.19
 
 WORKDIR /app
 
+# Installation des outils SQL Server
+RUN apk add --no-cache curl unixodbc-dev
+
 # Copie des fichiers de dépendances
 COPY package*.json ./
 RUN npm ci --only=production
@@ -30,13 +33,15 @@ COPY --from=builder /app/app.js ./app.js
 COPY --from=builder /app/database.js ./database.js
 COPY --from=builder /app/router.js ./router.js
 COPY --from=builder /app/.env ./.env
+COPY wait-for-db.sh /wait-for-db.sh
+RUN chmod +x /wait-for-db.sh
 
 # Variables d'environnement
 ENV NODE_ENV=production
 ENV DB_NAME=master
 ENV DB_USER=SA
 ENV DB_PASSWORD=BenjaminleGoat1!
-ENV DB_SERVER=localhost
+ENV DB_SERVER=mssql
 ENV DB_PORT=1433
 ENV JWT_SECRET=test
 
@@ -44,4 +49,4 @@ ENV JWT_SECRET=test
 EXPOSE 3000
 
 # Commande de démarrage
-CMD ["node", "app.js"]
+CMD ["/wait-for-db.sh", "mssql", "node", "app.js"]
