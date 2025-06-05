@@ -6,7 +6,7 @@ dotenv.config();
 
 console.log('Configuration de la base de données:', {
     database: process.env.DB_NAME,
-    host: process.env.DB_HOST,
+    server: process.env.DB_SERVER,
     port: process.env.DB_PORT,
     dialect: 'mssql'
 });
@@ -16,7 +16,7 @@ const config = new sql.Sequelize(
     process.env.DB_USER,
     process.env.DB_PASSWORD,
     {
-        host: process.env.DB_HOST,
+        host: process.env.DB_SERVER,
         dialect: 'mssql',
         dialectOptions: {
             options: {
@@ -25,7 +25,7 @@ const config = new sql.Sequelize(
             },
         },
         port: process.env.DB_PORT,
-        logging: true,
+        logging: false,
         define: {
             schema: 'dbo'
         }
