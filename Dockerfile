@@ -27,6 +27,8 @@ COPY --from=builder /app/src ./src
 COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/app.js ./app.js
+COPY --from=builder /app/database.js ./database.js
+COPY --from=builder /app/router.js ./router.js
 
 # Variables d'environnement
 ENV NODE_ENV=production
