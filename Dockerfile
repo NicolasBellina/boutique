@@ -25,6 +25,7 @@ RUN npm ci --only=production
 # Copie des fichiers buildés depuis le stage précédent
 COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/public ./public
+COPY --from=builder /app/app.js ./app.js
 
 # Variables d'environnement
 ENV NODE_ENV=production
@@ -33,4 +34,4 @@ ENV NODE_ENV=production
 EXPOSE 3000
 
 # Commande de démarrage
-CMD ["node", "dist/app.js"]
+CMD ["node", "app.js"]
