@@ -13,7 +13,6 @@ export default {
 </script>
 
 <style>
-/* Ajoutez ici vos styles globaux */
 body {
   margin: 0;
   font-family: Arial, sans-serif;

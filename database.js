@@ -8,7 +8,7 @@ console.log('Configuration de la base de données:', {
     database: process.env.DB_NAME,
     host: process.env.DB_SERVER,
     port: process.env.DB_PORT,
-    dialect: 'mssql'
+    dialect: 'postgres'
 });
 
 const config = new Sequelize(
@@ -18,7 +18,7 @@ const config = new Sequelize(
     {
         host: process.env.DB_SERVER,
         port: process.env.DB_PORT,
-        dialect: 'mssql',
+        dialect: 'postgres',
         logging: false,
         pool: {
             max: 5,
