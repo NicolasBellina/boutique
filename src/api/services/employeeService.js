@@ -1,6 +1,6 @@
 const axios = require('axios');
 
-const API_URL = process.env.API_URL || 'http://localhost/';
+const API_URL = process.env.API_URL;
 
 const employeeService = {
   async getAllEmployees() {
