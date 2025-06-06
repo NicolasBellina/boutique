@@ -247,7 +247,7 @@ export default {
   methods: {
     async loadEmployes() {
       try {
-        const response = await fetch('/api/employes');
+        const response = await fetch('https://boutique-n9l2.onrender.com/api/employes');
         if (!response.ok) {
           throw new Error(`Erreur HTTP: ${response.status}`);
         }
@@ -298,8 +298,8 @@ export default {
       try {
         const method = this.modalMode === 'add' ? 'POST' : 'PUT';
         const url = this.modalMode === 'add' 
-          ? '/api/employes'
-          : `/api/employes/${this.currentEmploye.id_employe}`;
+          ? 'https://boutique-n9l2.onrender.com/api/employes'
+          : `https://boutique-n9l2.onrender.com/api/employes/${this.currentEmploye.id_employe}`;
 
         const response = await fetch(url, {
           method,
@@ -324,7 +324,7 @@ export default {
     async supprimerEmploye(id) {
       if (confirm('Êtes-vous sûr de vouloir supprimer cet employé ?')) {
         try {
-          const response = await fetch(`/api/employes/${id}`, {
+          const response = await fetch(`https://boutique-n9l2.onrender.com/api/employes/${id}`, {
             method: 'DELETE',
             headers: {
               'Content-Type': 'application/json'
