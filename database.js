@@ -26,13 +26,6 @@ const config = new Sequelize(
             acquire: 30000,
             idle: 10000
         },
-        dialectOptions: {
-            options: {
-                encrypt: false,
-                trustServerCertificate: true,
-                enableArithAbort: true
-            }
-        },
         define: {
             timestamps: false,
             freezeTableName: true
