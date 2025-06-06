@@ -81,7 +81,6 @@ const Employe = sequelize.define('Employes', {
   }
 }, {
   tableName: 'Employes',
-  schema: 'dbo',
   timestamps: false,
   freezeTableName: true
 });
