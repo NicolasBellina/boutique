@@ -10,9 +10,9 @@ const sequelize = new Sequelize(
   {
     host: process.env.DB_SERVER,
     port: process.env.DB_PORT,
-    dialect: 'mssql',
-    logging: false // désactive les logs SQL
+    dialect: 'postgres',
+    logging: false
   }
 );
 
-export default sequelize; 
+export default sequelize;
